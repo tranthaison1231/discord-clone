@@ -2,7 +2,7 @@
   "type": "module",
   "scripts": {
     "deploy": "vercel",
-    "start": "vercel dev"
+    "start": "vercel dev --yes"
   },
   "dependencies": {
     "hono": "^3.10.1"
