@@ -18,7 +18,15 @@ app.use(
   })
 );
 
-app.post('/sign-in', (c) => c.json({ token: '124' }));
+app.post('/sign-in', async (c) => {
+  const { email, password } = await c.req.json();
+
+  if (email === 'son.tran@gmail.com' && password === '!Enouvo123') {
+    return c.json({ token: '124' });
+  }
+  return c.json({ error: 'Invalid email or password' }, 401);
+});
+
 app.post('/sign-up', (c) => c.json({ token: '124' }));
 
 export default handle(app);
