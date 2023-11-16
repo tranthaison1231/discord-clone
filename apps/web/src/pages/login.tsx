@@ -1,14 +1,22 @@
 import bgAuth from '@/assets/images/bg-auth.png';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { setToken } from '@/lib/storage';
-import { useNavigate } from 'react-router-dom';
+import { getToken, setToken } from '@/lib/storage';
+import { redirect, useNavigate } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { LoginSchema } from '@/lib/shema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useState } from 'react';
 import { signIn } from '@/apis/auth';
+
+export function Loader() {
+  const isAuth = getToken()
+  if(isAuth) {
+    return redirect('/orgs')
+  }
+  return null
+}
 
 export default function Component() {
   const [isLoading, setIsLoading] = useState(false);
