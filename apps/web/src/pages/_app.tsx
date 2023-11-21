@@ -1,14 +1,23 @@
-import { useEffect } from "react";
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { Outlet } from "react-router-dom";
 
-export default function Layout() {
-  useEffect(() => {
-    document.documentElement.classList.add('dark');
-  }, []);
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchIntervalInBackground: false,
+      refetchOnWindowFocus: false,
+      retry: false
+    }
+  }
+});
 
+
+export default function Layout() {
   return (
-    <div className="flex h-screen bg-background text-primary-foreground">
-      <Outlet />
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <div className="flex h-screen">
+        <Outlet />
+      </div>
+    </QueryClientProvider>
   );
 }

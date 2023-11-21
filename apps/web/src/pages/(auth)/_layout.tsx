@@ -1,6 +1,7 @@
 import OrgSidebar from "@/components/OrgSidebar";
 import { getToken } from "@/lib/storage";
 import { redirect } from "@/router";
+import { useEffect } from "react";
 import { Outlet } from 'react-router-dom';
 
 const ORGS = [
@@ -25,8 +26,11 @@ export function Loader() {
 }
 
 export default function App() {
+    useEffect(() => {
+      document.documentElement.classList.add('dark');
+    }, []);
   return (
-    <div className="flex h-screen bg-background w-full">
+    <div className="flex h-screen bg-background w-full text-primary-foreground">
       <OrgSidebar orgs={ORGS} />
       <Outlet />
     </div>
