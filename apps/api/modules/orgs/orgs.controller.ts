@@ -53,6 +53,20 @@ router
       },
     ])
   )
+  .get('/:orgId/channels/:channelId/messages', (c) =>
+    c.json([
+      {
+        id: 1,
+        sender: {
+          id: 1,
+          name: 'John Doe',
+          avatar: 'https://sukienvietsky.com/upload/news/son-tung-mtp-7359.jpeg',
+        },
+        createdAt: '2022-01-01T00:00:00.000Z',
+        message: 'Hey, how are you?',
+      },
+    ])
+  )
   .get('/:orgId/channels/:channelId/members', (c) =>
     c.json([
       {
