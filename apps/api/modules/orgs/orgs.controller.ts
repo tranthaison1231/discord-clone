@@ -20,60 +20,36 @@ router
   .get('/:orgId/channels', (c) =>
     c.json([
       {
-        id: 1,
-        name: 'Class',
-        channels: [
-          {
-            id: '1',
-            name: 'Class 1',
-          },
-          {
-            id: '2',
-            name: 'Class 2',
-          },
-        ],
+        id: '1',
+        name: 'Class 1',
+        category: {
+          id: 1,
+          name: 'Class',
+        },
       },
       {
-        id: 2,
-        name: 'Class Audio',
-        channels: [
-          {
-            id: '3',
-            name: 'Class 1',
-          },
-          {
-            id: '4',
-            name: 'Class 2',
-          },
-        ],
+        id: '2',
+        name: 'Class 2',
+        category: {
+          id: 1,
+          name: 'Class',
+        },
       },
       {
-        id: 3,
-        name: 'Class Audio',
-        channels: [
-          {
-            id: '5',
-            name: 'Class 1',
-          },
-          {
-            id: '6',
-            name: 'Class 2',
-          },
-        ],
+        id: '3',
+        name: 'Class 1',
+        category: {
+          id: 2,
+          name: 'Class Audio',
+        },
       },
       {
-        id: 4,
-        name: 'Class Audio',
-        channels: [
-          {
-            id: '5',
-            name: 'Class 1',
-          },
-          {
-            id: '6',
-            name: 'Class 2',
-          },
-        ],
+        id: '4',
+        name: 'Class 2',
+        category: {
+          id: 2,
+          name: 'Class Audio',
+        },
       },
     ])
   )
