@@ -50,7 +50,7 @@ export default function Component() {
   return (
     <div className="h-screen relative w-full">
       <img src={bgAuth} className="w-full h-full object-cover" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 w-1/3 -translate-y-1/2 bg-background text-center  p-8 rounded-sm text-primary-foreground">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 w-1/3 -translate-y-1/2 bg-black text-center  p-8 rounded-sm text-white">
         <h1 className="font-bold text-2xl">Welcome back!</h1>
         <p className="mb-4"> We're excited to see you again !</p>
         <form className="text-start" onSubmit={handleSubmit(onSubmit)}>

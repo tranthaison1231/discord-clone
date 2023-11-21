@@ -3,6 +3,9 @@ import { useParams } from '@/router';
 import { Calendar, ChevronDown, Grip, Headphones, Home, Mic, Plus, Users } from 'lucide-react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import SettingModal from './_components/SettingModal';
+import { useQuery } from 'react-query';
+import { getChannels } from '@/apis/channels';
+import { groupBy } from 'lodash-es';
 
 const HEADERS = [
   {
@@ -22,64 +25,6 @@ const HEADERS = [
   },
 ];
 
-const CATEGORIES = [
-  {
-    id: 1,
-    name: 'Class',
-    channels: [
-      {
-        id: '1',
-        name: 'Class 1',
-      },
-      {
-        id: '2',
-        name: 'Class 2',
-      },
-    ],
-  },
-  {
-    id: 2,
-    name: 'Class Audio',
-    channels: [
-      {
-        id: '3',
-        name: 'Class 1',
-      },
-      {
-        id: '4',
-        name: 'Class 2',
-      },
-    ],
-  },
-  {
-    id: 3,
-    name: 'Class Audio',
-    channels: [
-      {
-        id: '5',
-        name: 'Class 1',
-      },
-      {
-        id: '6',
-        name: 'Class 2',
-      },
-    ],
-  },
-  {
-    id: 4,
-    name: 'Class Audio',
-    channels: [
-      {
-        id: '5',
-        name: 'Class 1',
-      },
-      {
-        id: '6',
-        name: 'Class 2',
-      },
-    ],
-  },
-];
 
 export default function Org() {
   const { channelID, orgID } = useParams('/orgs/:orgID/channels/:channelID');
@@ -88,6 +33,8 @@ export default function Org() {
   const navigateToChannel = (id: string) => {
     navigate(`/orgs/${orgID}/channels/${id}`);
   };
+
+  const { data }  = useQuery(['channels'], () => getChannels(orgID));
 
   return (
     <div className="w-full flex">
@@ -110,17 +57,17 @@ export default function Org() {
           </div>
           <div className="px-2 text-primary-foreground/60">
             <hr className="h-2 my-4 border-primary-foreground/60" />
-            {CATEGORIES.map((category) => (
-              <div key={category.id}>
+            {Object.entries(groupBy(data?.data, 'category.name'))?.map(([category, channels]) => (
+              <div key={category}>
                 <div className="flex gap-2 justify-between">
                   <div className="flex gap-2">
                     <ChevronDown className="w-4" />
-                    <h1 className="uppercase"> {category.name} </h1>
+                    <h1 className="uppercase"> {category} </h1>
                   </div>
                   <Plus />
                 </div>
                 <div className="py-4 space-y-2">
-                  {category.channels.map((channel) => (
+                  {channels.map((channel) => (
                     <div
                       className={cn('px-6 py-3 cursor-pointer', {
                         'bg-primary-foreground/20 text-primary-foreground/80': channel.id === channelID,
@@ -137,11 +84,15 @@ export default function Org() {
           </div>
         </div>
         <div className="absolute bottom-0 p-3 flex justify-between items-center w-full">
-          <div className='flex gap-2'>
-            <img src="https://sukienvietsky.com/upload/news/son-tung-mtp-7359.jpeg" width={40} className='rounded-full aspect-square object-cover' />
+          <div className="flex gap-2">
+            <img
+              src="https://sukienvietsky.com/upload/news/son-tung-mtp-7359.jpeg"
+              width={40}
+              className="rounded-full aspect-square object-cover"
+            />
             <div>
-              <p className='font-bold text-base'>Son Tran</p>
-              <p className='text-sm'>sontran1711</p>
+              <p className="font-bold text-base">Son Tran</p>
+              <p className="text-sm">sontran1711</p>
             </div>
           </div>
           <div className="flex gap-2">
