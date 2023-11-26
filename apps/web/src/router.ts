@@ -5,14 +5,18 @@ import { components, hooks, utils } from '@generouted/react-router/client'
 
 export type Path =
   | `/`
+  | `/channels/:orgID/:channelID`
+  | `/channels/:orgID/channel-browser`
+  | `/channels/:orgID/member-safety`
   | `/login`
-  | `/orgs/:orgID/channels/:channelID`
   | `/register`
   | `/safety`
   | `/servers`
 
 export type Params = {
-  '/orgs/:orgID/channels/:channelID': { orgID: string; channelID: string }
+  '/channels/:orgID/:channelID': { orgID: string; channelID: string }
+  '/channels/:orgID/channel-browser': { orgID: string }
+  '/channels/:orgID/member-safety': { orgID: string }
 }
 
 export type ModalPath = never

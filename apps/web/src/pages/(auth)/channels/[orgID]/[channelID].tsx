@@ -1,13 +1,13 @@
 import TooltipIcon from '@/components/TooltipIcon';
 import { useParams } from '@/router';
 import { Frame, HelpCircle, Users2 } from 'lucide-react';
+import { useState } from 'react';
 import MemberList from './_components/MemberList';
 import ChatList from './_components/ChatList';
-import { useState } from 'react';
 
 export default function Channel() {
   const [isHideMemberList, setIsHideMemberList] = useState(false);
-  const { channelID } = useParams('/orgs/:orgID/channels/:channelID');
+  const { channelID } = useParams('/channels/:orgID/:channelID');
   return (
     <div>
       <header className="p-3 h-14 border-b bg-primary-foreground/20 text-2xl flex items-center justify-between">

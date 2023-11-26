@@ -5,8 +5,8 @@ import { useQuery } from 'react-query';
 import { useParams } from '@/router';
 
 export default function MemberList() {
-  const { channelID, orgID } = useParams('/orgs/:orgID/channels/:channelID');
-  const { data } = useQuery(['members'], () => getMembers(orgID, channelID));
+  const { channelID, id } = useParams('/channels/:channelID/:id');
+  const { data } = useQuery(['members'], () => getMembers(channelID, id));
   return (
     <div className="flex flex-col gap-8">
       {Object.entries(groupBy(data?.data, 'category.name')).map(([category, members]) => (

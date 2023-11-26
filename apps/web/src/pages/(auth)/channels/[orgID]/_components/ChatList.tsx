@@ -19,8 +19,6 @@ export default function ChatList() {
 
   const { data } = useQuery(['messages'], () => getMessages(orgID, channelID));
 
-
-
   const handleChange = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && content.trim() !== '') {
       flushSync(() => {

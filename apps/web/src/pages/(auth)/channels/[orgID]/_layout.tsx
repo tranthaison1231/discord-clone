@@ -1,40 +1,24 @@
+import { getChannels } from '@/apis/channels';
 import { cn } from '@/lib/utils';
-import { useParams } from '@/router';
-import { Calendar, ChevronDown, Grip, Headphones, Home, Mic, Plus, Users } from 'lucide-react';
+import { Link, useParams } from '@/router';
+import { groupBy } from 'lodash-es';
+import { ChevronDown, Grip, Headphones, Home, Mic, Plus, Users } from 'lucide-react';
+import { useQuery } from 'react-query';
 import { Outlet, useNavigate } from 'react-router-dom';
 import SettingModal from './_components/SettingModal';
-import { useQuery } from 'react-query';
-import { getChannels } from '@/apis/channels';
-import { groupBy } from 'lodash-es';
+import EventsModal from './_components/EventsModal';
 
-const HEADERS = [
-  {
-    id: 1,
-    name: 'Events',
-    icon: Calendar,
-  },
-  {
-    id: 2,
-    name: 'Browse Channels',
-    icon: Grip,
-  },
-  {
-    id: 3,
-    name: 'Members',
-    icon: Users,
-  },
-];
-
-
-export default function Org() {
-  const { channelID, orgID } = useParams('/orgs/:orgID/channels/:channelID');
+export default function Component() {
+  const { channelID , orgID } = useParams('/channels/:orgID/:channelID');
   const navigate = useNavigate();
 
   const navigateToChannel = (id: string) => {
-    navigate(`/orgs/${orgID}/channels/${id}`);
+    navigate(`/channels/${orgID}/${id}`);
   };
 
-  const { data }  = useQuery(['channels'], () => getChannels(orgID));
+  const { data } = useQuery(['channels'], () => getChannels(orgID));
+
+  const channels = data?.data;
 
   return (
     <div className="w-full flex">
@@ -47,17 +31,31 @@ export default function Org() {
           <ChevronDown />
         </div>
         <div className="h-3/4 overflow-scroll">
-          <div className="text-xl text-primary-foreground/60">
-            {HEADERS.map((header) => (
-              <div className="px-3 py-2 flex gap-2 cursor-pointer hover:bg-primary-foreground/20" key={header.id}>
-                <header.icon />
-                <p> {header.name} </p>
-              </div>
-            ))}
+          <div className="text-xl text-primary-foreground/60 pl-2 pt-2">
+            <EventsModal />
+            <Link
+              to="/channels/:orgID/channel-browser"
+              params={{ orgID }}
+              className="px-3 py-2 flex gap-2 w-full hover:bg-primary-foreground/20"
+            >
+              <Grip />
+              <p> Browse Channels </p>
+            </Link>
+            <Link
+              to="/channels/:orgID/member-safety"
+              params={{ orgID }}
+              state={{
+                channel: channels?.find((channel) => channel.id === channelID),
+              }}
+              className="px-3 py-2 flex gap-2 w-full hover:bg-primary-foreground/20"
+            >
+              <Users />
+              <p> Members </p>
+            </Link>
           </div>
           <div className="px-2 text-primary-foreground/60">
             <hr className="h-2 my-4 border-primary-foreground/60" />
-            {Object.entries(groupBy(data?.data, 'category.name'))?.map(([category, channels]) => (
+            {Object.entries(groupBy(channels, 'category.name'))?.map(([category, channels]) => (
               <div key={category}>
                 <div className="flex gap-2 justify-between">
                   <div className="flex gap-2">
