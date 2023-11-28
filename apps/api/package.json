@@ -1,6 +1,7 @@
 {
   "type": "module",
   "scripts": {
+    "postinstall": "prisma generate",
     "deploy": "vercel",
     "start": "vercel dev --yes"
   },

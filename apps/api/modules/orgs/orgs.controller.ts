@@ -6,6 +6,7 @@ export const router = new Hono();
 router
   .get("/", async (c) => {
     const orgs = await db.org.findMany({});
+    console.log("orgs", orgs);
     return c.json(orgs);
   })
   .get("/:orgId/channels", (c) =>
