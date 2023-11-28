@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { db } from "../../prisma/db";
+import { db } from "../../../prisma/db";
 
 export const router = new Hono();
 
