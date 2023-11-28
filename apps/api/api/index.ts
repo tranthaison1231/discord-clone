@@ -26,4 +26,5 @@ app.route("/orgs", orgs);
 export const config = {
   runtime: "edge",
 };
+
 export default handle(app);
