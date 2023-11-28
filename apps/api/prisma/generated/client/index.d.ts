@@ -1822,13 +1822,13 @@ export namespace Prisma {
   }
 
   export type OrgCreateInput = {
-    id: string
+    id?: string
     icon: string
     name: string
   }
 
   export type OrgUncheckedCreateInput = {
-    id: string
+    id?: string
     icon: string
     name: string
   }
@@ -1846,7 +1846,7 @@ export namespace Prisma {
   }
 
   export type OrgCreateManyInput = {
-    id: string
+    id?: string
     icon: string
     name: string
   }
