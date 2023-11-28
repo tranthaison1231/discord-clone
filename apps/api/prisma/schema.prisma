@@ -6,7 +6,6 @@ datasource db {
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["fullTextIndex"]
-  output   = "./generated/client"
 }
 
 model Org {
