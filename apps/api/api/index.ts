@@ -15,19 +15,8 @@ app.use("*", logger());
 app.use(
   "*",
   cors({
-    origin: ["*"],
+    origin: ["http://localhost:5173"],
     credentials: true,
-    allowHeaders: [
-      "Content-Type",
-      "Content-Length",
-      "Accept-Encoding",
-      "X-CSRF-Token",
-      "Authorization",
-      "accept",
-      "origin",
-      "Cache-Control",
-      "X-Requested-With",
-    ],
   })
 );
 app.route("/", auth);
