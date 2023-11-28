@@ -1,26 +1,18 @@
+import { getOrgMembers } from '@/apis/orgs';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Link, useParams } from '@/router';
 import { HelpCircle, Users } from 'lucide-react';
+import { useQuery } from 'react-query';
 import { useLocation } from 'react-router-dom';
 
 
-const MEMBERS = [
-  {
-    id: '001',
-    displayName: 'John Doe',
-    username: 'john_doe',
-    avatar: 'https://sukienvietsky.com/upload/news/son-tung-mtp-7359.jpeg',
-    memberSince: '2022-01-01',
-    joinedDiscord: '2022-01-01',
-    joinMethod: 'Discord',
-    roles: ['Admin'],
-  },
-];
 
 export default function Component() {
   const { orgID} = useParams('/channels/:orgID/member-safety');
   const location = useLocation()
+  const { data: membersResult } = useQuery(['members'], () => getOrgMembers(orgID));
+
   return (
     <div>
       <header className="p-3 h-14 border-b bg-primary-foreground/20  text-2xl flex items-center justify-between">
@@ -61,7 +53,7 @@ export default function Component() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {MEMBERS.map((member) => (
+              {membersResult?.data?.map((member) => (
                 <TableRow key={member.id}>
                   <TableCell className="gap-2 flex items-center">
                     <Checkbox />

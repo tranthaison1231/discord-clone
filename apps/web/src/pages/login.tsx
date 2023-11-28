@@ -42,7 +42,7 @@ export default function Component() {
       setIsLoading(true);
       const res = await signIn(email, password);
       setToken(res.data.accessToken);
-      navigate('/orgs');
+      navigate("/channels");
     } catch (error) {
       console.error(error);
     } finally {

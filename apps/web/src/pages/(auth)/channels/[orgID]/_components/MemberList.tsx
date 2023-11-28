@@ -1,12 +1,14 @@
-import { getMembers } from '@/apis/members';
-import PopoverMember from './PopoverMember';
+import { useParams } from '@/router';
 import { groupBy } from 'lodash-es';
 import { useQuery } from 'react-query';
-import { useParams } from '@/router';
+import PopoverMember from './PopoverMember';
+import { getChannelMembers } from '@/apis/channels';
 
 export default function MemberList() {
-  const { channelID, id } = useParams('/channels/:channelID/:id');
-  const { data } = useQuery(['members'], () => getMembers(channelID, id));
+  const { channelID, orgID } = useParams('/channels/:orgID/:channelID');
+  const { data } = useQuery(["members"], () =>
+    getChannelMembers(orgID, channelID)
+  );
   return (
     <div className="flex flex-col gap-8">
       {Object.entries(groupBy(data?.data, 'category.name')).map(([category, members]) => (

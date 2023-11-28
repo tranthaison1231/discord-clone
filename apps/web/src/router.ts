@@ -9,6 +9,7 @@ export type Path =
   | `/channels/:orgID/channel-browser`
   | `/channels/:orgID/member-safety`
   | `/login`
+  | `/nitro`
   | `/register`
   | `/safety`
   | `/servers`

@@ -53,6 +53,9 @@
   * {
     @apply border-border;
   }
+  *::-webkit-scrollbar {
+    display: none;
+  }
   body {
     @apply bg-background text-foreground;
   }

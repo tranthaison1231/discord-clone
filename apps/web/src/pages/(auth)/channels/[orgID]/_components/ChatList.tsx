@@ -12,7 +12,7 @@ import { Message } from "@/lib/type";
 
 
 export default function ChatList() {
-  const { channelID, orgID } = useParams('/orgs/:orgID/channels/:channelID')
+  const { channelID, orgID } = useParams('/channels/:orgID/:channelID')
   const chatListRef = useRef<HTMLDivElement>(null);
   const [content, setContent] = useState('');
   const [messages, setMessages] = useState<Message[]>([])
