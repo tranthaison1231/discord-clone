@@ -1,9 +1,11 @@
 import TooltipIcon from '@/components/TooltipIcon';
+import { cn } from '@/lib/utils';
 import { useParams } from '@/router';
 import { Frame, HelpCircle, Users2 } from 'lucide-react';
 import { useState } from 'react';
-import MemberList from './_components/MemberList';
 import ChatList from './_components/ChatList';
+import MemberList from './_components/MemberList';
+import PopoverInbox from './_components/PopoverInbox';
 
 export default function Channel() {
   const [isHideMemberList, setIsHideMemberList] = useState(false);
@@ -17,14 +19,23 @@ export default function Channel() {
         </div>
         <div className="flex items-center gap-4">
           <TooltipIcon
-            icon={<Users2 onClick={() => setIsHideMemberList(!isHideMemberList)} />}
-            content={isHideMemberList ? 'Show member list' : 'Hide member list'}
+            icon={
+              <Users2 className={cn("cursor-pointer text-gray-400 hover:text-white", {
+                "text-white": !isHideMemberList
+              })} onClick={() => setIsHideMemberList(!isHideMemberList)} />
+            }
+            content={isHideMemberList ? "Show member list" : "Hide member list"}
           />
-          <HelpCircle className="cursor-pointer" />
+          <PopoverInbox  />
+          <HelpCircle className="cursor-pointer text-gray-400 hover:text-white" />
         </div>
       </header>
       <div className="flex h-[calc(100vh-3.5rem)]">
-        <div className={`${isHideMemberList ? 'w-full' : 'w-[calc(100%-16rem)]'} bg-primary-foreground/20 px-6`}>
+        <div
+          className={`${
+            isHideMemberList ? "w-full" : "w-[calc(100%-16rem)]"
+          } bg-primary-foreground/20 px-6`}
+        >
           <ChatList />
         </div>
         {isHideMemberList ? null : (

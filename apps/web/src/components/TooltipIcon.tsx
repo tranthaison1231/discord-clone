@@ -11,9 +11,7 @@ export default function TooltipIcon({ icon, content}: TooltipIconProps) {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>{
-          React.cloneElement(icon, {
-            className: 'cursor-pointer',
-          })
+          React.cloneElement(icon)
         }</TooltipTrigger>
         <TooltipContent>{content}</TooltipContent>
       </Tooltip>
