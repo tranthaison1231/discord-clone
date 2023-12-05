@@ -1,5 +1,7 @@
 import { db } from "@/lib/db";
+import { BadRequestException, UnauthorizedException } from "@/utils/exceptions";
 import { hashPassword } from "@/utils/password";
+import { Prisma } from "@prisma/client";
 import * as bcrypt from "bcrypt";
 
 export class AuthService {
@@ -22,26 +24,32 @@ export class AuthService {
   }
 
   static async signUp(email: string, password: string) {
-    const user = await db.user.findUnique({
-      where: {
-        email: email,
-      },
-    });
+    try {
+      if (!email || !password) {
+        throw new BadRequestException(`Email and password are required`);
+      }
 
-    if (user) {
-      throw new Error(`Email ${email} already exists`);
+      const salt = bcrypt.genSaltSync();
+      const hashedPassword = await hashPassword(password, salt);
+
+      const newUser = await db.user.create({
+        data: {
+          email: email,
+          password: hashedPassword,
+          salt: salt,
+        },
+      });
+
+      return newUser;
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === "P2002"
+      ) {
+        throw new UnauthorizedException(`User ${email} already exists`);
+      } else {
+        throw error;
+      }
     }
-    const salt = "124124";
-    const hashedPassword = await hashPassword(password, salt);
-
-    const newUser = await db.user.create({
-      data: {
-        email: email,
-        password: hashedPassword,
-        salt: salt,
-      },
-    });
-
-    return newUser;
   }
 }
