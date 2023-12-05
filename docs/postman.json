@@ -1,0 +1,116 @@
+{
+	"info": {
+		"_postman_id": "97e0c1dd-e3be-42de-a76c-a114887c51a8",
+		"name": "Discord",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9202600"
+	},
+	"item": [
+		{
+			"name": "sign-in",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"son.tran@gmail.com\",\n    \"password\": \"!Enouvo123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/sign-in",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"sign-in"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/orgs/:orgId/channels/:channelId/members",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://discord-api-five.vercel.app/api/orgs/1/channels/1/members",
+					"protocol": "https",
+					"host": [
+						"discord-api-five",
+						"vercel",
+						"app"
+					],
+					"path": [
+						"api",
+						"orgs",
+						"1",
+						"channels",
+						"1",
+						"members"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/orgs",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Enouvo\",\n    \"icon\": \"https://enouvo.com/wp-content/uploads/2022/07/cropped-logo-vien-trang-file-in-01.png\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/orgs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"orgs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/orgs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/orgs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"orgs"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
