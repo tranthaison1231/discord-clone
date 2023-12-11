@@ -1,7 +1,7 @@
-import axios from 'axios';
-// import { getToken, removeToken, setToken } from './storage';
+import axios from "axios";
+import { getToken } from "./storage";
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 
 export const request = axios.create({
   baseURL: BASE_URL,
@@ -9,13 +9,13 @@ export const request = axios.create({
   withCredentials: true,
 });
 
-// request.interceptors.request.use((config) => {
-//   const token = getToken();
-//   if (token) {
-//     config.headers.Authorization = `Bearer ${token}`;
-//   }
-//   return config;
-// });
+request.interceptors.request.use((config) => {
+  const token = getToken();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
 // request.interceptors.response.use(
 //   (response) => {

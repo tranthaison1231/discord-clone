@@ -1,16 +1,19 @@
+import { signIn } from '@/apis/auth';
 import bgAuth from '@/assets/images/bg-auth.png';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { getToken, setToken } from '@/lib/storage';
-import { redirect, useNavigate } from 'react-router-dom';
-import { useForm, SubmitHandler } from 'react-hook-form';
 import { LoginSchema } from '@/lib/shema';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { useState } from 'react';
-import { signIn } from '@/apis/auth';
+import { getToken, setToken } from '@/lib/storage';
 import { Link } from '@/router';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { AxiosError } from 'axios';
 import { ChevronLeft } from 'lucide-react';
+import { useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { redirect, useNavigate } from 'react-router-dom';
+import { toast } from "sonner";
+import * as z from 'zod';
+
 
 export function Loader() {
   const isAuth = getToken();
@@ -44,7 +47,9 @@ export default function Component() {
       setToken(res.data.accessToken);
       navigate("/channels");
     } catch (error) {
-      console.error(error);
+      if(error instanceof AxiosError) {
+        toast.error(error.response?.data.message);
+      }
     } finally {
       setIsLoading(false);
     }
