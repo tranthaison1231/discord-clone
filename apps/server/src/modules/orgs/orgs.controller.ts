@@ -5,15 +5,24 @@ export const router = new Hono();
 
 router
   .get("/", async (c) => {
-    const orgs = await db.org.findMany({});
+    const user = c.get("user");
+
+    const orgs = await db.org.findMany({
+      where: {
+        userId: user?.id,
+      },
+    });
     return c.json(orgs);
   })
   .post("/", async (c) => {
+    const user = c.get("user");
+
     const { name, icon } = await c.req.json<{ name: string; icon: string }>();
     const orgs = await db.org.create({
       data: {
         name: name,
         icon: icon,
+        userId: user?.id,
       },
     });
     return c.json(orgs);

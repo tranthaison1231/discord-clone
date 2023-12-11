@@ -1,8 +1,12 @@
+import { Prisma } from "@prisma/client";
 import { db } from "@/lib/db";
 import { BadRequestException, UnauthorizedException } from "@/utils/exceptions";
 import { hashPassword } from "@/utils/password";
-import { Prisma } from "@prisma/client";
 import * as bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { JWT_SECRET } from "@/lib/config";
+
+export const ACCESS_TOKEN_EXPIRE_IN = 60 * 60;
 
 export class AuthService {
   static async signIn(email: string, password: string) {
@@ -12,15 +16,20 @@ export class AuthService {
       },
     });
     if (!user) {
-      throw new Error(`Email ${email} not found`);
+      throw new UnauthorizedException(`Email ${email} not found`);
     }
 
     const isValid = await bcrypt.compare(password, user.password);
 
     if (!isValid) {
-      throw new Error(`Invalid password`);
+      throw new UnauthorizedException(`Invalid password`);
     }
-    return "1247127571251725";
+
+    const accessToken = jwt.sign({ userId: user.id }, JWT_SECRET, {
+      expiresIn: ACCESS_TOKEN_EXPIRE_IN,
+    });
+
+    return { accessToken };
   }
 
   static async signUp(email: string, password: string) {
