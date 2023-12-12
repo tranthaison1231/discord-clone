@@ -4,8 +4,8 @@ import { BadRequestException, UnauthorizedException } from "@/utils/exceptions";
 import { hashPassword } from "@/utils/password";
 import * as bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { JWT_SECRET } from "@/lib/config";
 import { mailService } from "@/lib/mail.service";
+import { JWT_SECRET } from "@/utils/constants";
 
 export const ACCESS_TOKEN_EXPIRE_IN = 60 * 60;
 

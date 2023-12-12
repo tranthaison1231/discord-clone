@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
 import { UnauthorizedException } from "@/utils/exceptions";
 import { Context, Next } from "hono";
-import { JWT_SECRET } from "@/lib/config";
 import { db } from "@/lib/db";
+import { JWT_SECRET } from "@/utils/constants";
 
 export const auth = async (c: Context, next: Next) => {
   try {
