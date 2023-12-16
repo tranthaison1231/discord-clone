@@ -29,7 +29,7 @@ router
         message:
           "Sign up successfully. Please check your email to verify your account.",
       },
-      201
+      201,
     );
   })
   .post(
@@ -45,9 +45,9 @@ router
           message:
             "We have sent a password reset link to your email. Please check your email.",
         },
-        201
+        201,
       );
-    }
+    },
   )
   .put(
     "/reset-password",
@@ -64,7 +64,7 @@ router
           message:
             "Your password has been reset successfully. Please login with your new password.",
         },
-        200
+        200,
       );
-    }
+    },
   );
