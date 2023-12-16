@@ -90,7 +90,7 @@ export class AuthService {
 
     if (isSamePassword) {
       throw new BadRequestException(
-        `New password cannot be the same as old password`
+        `New password cannot be the same as old password`,
       );
     }
 
