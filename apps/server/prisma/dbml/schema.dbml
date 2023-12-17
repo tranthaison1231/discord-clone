@@ -16,6 +16,7 @@ Table users {
   password String [not null]
   salt String [not null]
   orgs users_on_orgs [not null]
+  fullName String
 }
 
 Table channels {

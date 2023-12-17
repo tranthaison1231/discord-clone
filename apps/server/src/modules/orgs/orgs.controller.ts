@@ -2,53 +2,44 @@ import { db } from "@/lib/db";
 import { paginationSchema } from "@/utils/schema";
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
+import { OrgsService } from "./orgs.service";
 
 export const router = new Hono();
 
 router
   .get("/", zValidator("query", paginationSchema), async (c) => {
     const user = c.get("user");
-    const name = c.req.query("name");
-    const page = +c.req.query("page") || 1;
-    const limit = +c.req.query("limit") || 10;
+    const search = c.req.query("search");
+    const page = +c.req.query("page");
+    const limit = +c.req.query("limit");
 
-    const orgs = await db.org.findMany({
-      skip: (page - 1) * limit,
-      take: limit,
-      where: {
-        userId: user?.id,
-        name: {
-          contains: name,
-        },
-      },
-    });
-    const total = await db.org.count({
-      where: {
-        userId: user?.id,
-        name: {
-          contains: name,
-        },
-      },
+    const data = await OrgsService.getAll(user?.id, {
+      page,
+      limit,
+      search,
     });
 
-    return c.json({
-      data: orgs,
-      total: total,
-      totalPage: Math.ceil(total / limit),
-    });
+    return c.json(data);
+  })
+  .get("/:orgId", async (c) => {
+    const orgId = c.req.param("orgId");
+
+    const org = await OrgsService.getBy(orgId);
+
+    return c.json(org);
   })
   .post("/", async (c) => {
     const user = c.get("user");
 
     const { name, icon } = await c.req.json<{ name: string; icon: string }>();
-    const orgs = await db.org.create({
-      data: {
-        name: name,
-        icon: icon,
-        userId: user?.id,
-      },
+
+    const org = await OrgsService.create({
+      userId: user.id,
+      name,
+      icon,
     });
-    return c.json(orgs);
+
+    return c.json(org);
   })
   .get("/:orgId/channels", (c) =>
     c.json([
@@ -84,7 +75,7 @@ router
           name: "Class Audio",
         },
       },
-    ])
+    ]),
   )
   .get("/:orgId/members", async (c) => {
     const orgId = c.req.param("orgId");
@@ -147,7 +138,7 @@ router
         createdAt: "2022-01-01T00:00:00.000Z",
         message: "Hey, how are you?",
       },
-    ])
+    ]),
   )
   .get("/:orgId/channels/:channelId/members", (c) =>
     c.json([
@@ -184,5 +175,5 @@ router
           name: "Online",
         },
       },
-    ])
+    ]),
   );
