@@ -18,8 +18,19 @@ model Org {
   name   String
   userId String
   users  UsersOnOrgs[]
+  Role   Role[]
 
   @@map("orgs")
+}
+
+model Role {
+  id    String @id @default(cuid())
+  name  String
+  color String
+  orgId String
+  org   Org    @relation(fields: [orgId], references: [id])
+
+  @@map("roles")
 }
 
 model User {
