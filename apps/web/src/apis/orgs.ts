@@ -1,7 +1,16 @@
 import { request } from "@/lib/request";
+import * as z from "zod";
+
+const orgSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  icon: z.string(),
+});
 
 export const getOrgs = async () => {
-  return request.get("/orgs");
+  const res = await request.get("/orgs");
+  console.log(res.data);
+  return orgSchema.array().parse(res.data.data);
 };
 
 interface Member {
@@ -20,5 +29,6 @@ export const getOrgMembers = async (orgID: string) => {
 };
 
 export const getOrg = async (orgID: string) => {
-  return request.get(`/orgs/${orgID}`);
+  const res = await request.get(`/orgs/${orgID}`);
+  return orgSchema.parse(res.data);
 };

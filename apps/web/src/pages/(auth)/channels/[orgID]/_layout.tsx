@@ -25,22 +25,19 @@ export default function Component() {
     navigate(`/channels/${orgID}/${id}`);
   };
 
-  const { data: channelsData } = useQuery(["channels", orgID], () =>
+  const { data: channels } = useQuery(["channels", orgID], () =>
     getChannels(orgID),
   );
 
-  const { data: orgData } = useQuery(["orgs", orgID], () => getOrg(orgID));
+  const { data: org } = useQuery(["orgs", orgID], () => getOrg(orgID));
 
-  const channels = channelsData?.data;
-
-  console.log(orgData?.data);
   return (
     <div className="w-full flex">
       <div className="relative bg-primary-foreground/10 text-primary-foreground 0 w-[16rem] flex flex-col">
         <div className="border-b h-14 border-primary-foreground/10 p-3 flex items-center justify-between">
           <div className="flex gap-2 text-2xl items-center">
             <Home />
-            <h1 className="font-bold"> Enouvo </h1>
+            <h1 className="font-bold"> {org?.name} </h1>
           </div>
           <ChevronDown />
         </div>

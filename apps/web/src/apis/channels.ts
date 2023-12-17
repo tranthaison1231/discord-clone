@@ -6,7 +6,8 @@ interface Channel {
 }
 
 export const getChannels = async (orgID: string) => {
-  return request.get<Channel[]>(`/orgs/${orgID}/channels`);
+  const res = await request.get<Channel[]>(`/orgs/${orgID}/channels`);
+  return res.data;
 };
 
 export const getChannelMembers = async (orgID: string, channelID: string) => {

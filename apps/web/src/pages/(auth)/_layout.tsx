@@ -19,11 +19,11 @@ export default function App() {
     document.documentElement.classList.add("dark");
   }, []);
 
-  const { data: orgsQuery } = useQuery(["orgs"], () => getOrgs());
+  const { data: orgs } = useQuery(["orgs"], () => getOrgs());
 
   return (
     <div className="flex h-screen bg-background w-full text-primary-foreground">
-      <OrgSidebar orgs={orgsQuery?.data.data ?? []} />
+      <OrgSidebar orgs={orgs ?? []} />
       <Outlet />
     </div>
   );
