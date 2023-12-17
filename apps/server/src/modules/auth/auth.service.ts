@@ -5,7 +5,7 @@ import { hashPassword } from "@/utils/password";
 import * as bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { mailService } from "@/lib/mail.service";
-import { JWT_SECRET } from "@/utils/constants";
+import { JWT_SECRET, WEB_URL } from "@/utils/constants";
 
 export const ACCESS_TOKEN_EXPIRE_IN = 60 * 60;
 
@@ -80,7 +80,7 @@ export class AuthService {
 
     await mailService.sendMail({
       to: email,
-      html: `Click <a href="http://localhost:3000/auth/reset-password?token=${accessToken}">here</a> to reset your password`,
+      html: `Click <a href="${WEB_URL}/reset-password?token=${accessToken}">here</a> to reset your password`,
       subject: "Reset  password",
     });
   }

@@ -18,7 +18,7 @@ app.use(
       "https://discord-clone-beryl-kappa.vercel.app",
     ],
     credentials: true,
-  })
+  }),
 );
 app.route("/", authRouter);
 
