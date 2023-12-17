@@ -8,9 +8,11 @@ export type Path =
   | `/channels/:orgID/:channelID`
   | `/channels/:orgID/channel-browser`
   | `/channels/:orgID/member-safety`
+  | `/forgot-password`
   | `/login`
   | `/nitro`
   | `/register`
+  | `/reset-password`
   | `/safety`
   | `/servers`
 

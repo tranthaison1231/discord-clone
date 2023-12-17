@@ -1,16 +1,16 @@
-import { signIn } from "@/apis/auth";
+import { forgotPassword } from "@/apis/auth";
 import bgAuth from "@/assets/images/bg-auth.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { LoginSchema } from "@/lib/shema";
-import { getToken, setToken } from "@/lib/storage";
+import { ForgotPasswordSchema } from "@/lib/shema";
+import { getToken } from "@/lib/storage";
 import { Link } from "@/router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
 import { ChevronLeft } from "lucide-react";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { redirect, useNavigate } from "react-router-dom";
+import { redirect } from "react-router-dom";
 import { toast } from "sonner";
 import * as z from "zod";
 
@@ -24,7 +24,6 @@ export function Loader() {
 
 export default function Component() {
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
 
   const {
     register,
@@ -32,22 +31,21 @@ export default function Component() {
     formState: { errors },
   } = useForm({
     mode: "onBlur",
-    resolver: zodResolver(LoginSchema),
+    resolver: zodResolver(ForgotPasswordSchema),
     defaultValues: {
       email: "admin@enouvo.com",
-      password: "Enouvo@123",
     },
   });
 
-  const onSubmit: SubmitHandler<z.infer<typeof LoginSchema>> = async ({
+  const onSubmit: SubmitHandler<z.infer<typeof ForgotPasswordSchema>> = async ({
     email,
-    password,
   }) => {
     try {
       setIsLoading(true);
-      const res = await signIn(email, password);
-      setToken(res.data.accessToken);
-      navigate("/channels");
+      await forgotPassword(email);
+      toast.success(
+        "Your password has been sent to your email! Please check your email",
+      );
     } catch (error) {
       if (error instanceof AxiosError) {
         toast.error(error.response?.data.message);
@@ -65,11 +63,7 @@ export default function Component() {
             <Link to="/" className="inline-flex mb-4">
               <ChevronLeft /> Go back
             </Link>
-            <h1 className="font-bold text-2xl text-center">Welcome back!</h1>
-            <p className="mb-4 text-center">
-              {" "}
-              We're excited to see you again !
-            </p>
+            <h1 className="font-bold text-2xl text-center">Forgot Password</h1>
             <form className="text-start mt-5" onSubmit={handleSubmit(onSubmit)}>
               <Input
                 placeholder="Email Or Phone Number"
@@ -79,47 +73,14 @@ export default function Component() {
               {errors.email && (
                 <p className="mt-1 text-red-500">{errors.email.message}</p>
               )}
-              <Input
-                placeholder="Password"
-                type="password"
-                className="mt-6 bg-gray-200  text-black"
-                {...register("password")}
-              />
-              {errors.password && (
-                <p className="my-1 text-red-500">{errors.password.message}</p>
-              )}
-              <Link
-                to="/forgot-password"
-                className="text-sky-500 text-xs text-start cursor-pointer my-1"
-              >
-                Forgot Password?
-              </Link>
               <Button
                 className="w-full mt-4 mb-3"
                 type="submit"
                 loading={isLoading}
               >
-                Login
+                Submit
               </Button>
-              <p className="text-xs">
-                {" "}
-                Need an account?{" "}
-                <Link to="/register" className="text-sky-500">
-                  Sign up
-                </Link>
-              </p>
             </form>
-          </div>
-          <div className="hidden md:flex items-center flex-col justify-center">
-            <div> QR Code </div>
-            <h2 className="text-center text-xl font-bold">
-              {" "}
-              Log in with QR Code
-            </h2>
-            <p className="text-center text-neutral-300 text-sm">
-              Scan this with the <strong>Discord mobile app</strong> to log in
-              instantly.
-            </p>
           </div>
         </div>
       </div>
