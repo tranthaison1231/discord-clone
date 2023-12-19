@@ -9,6 +9,7 @@ import {
 } from "./dto/auth.dto";
 import { auth, verifyToken } from "@/middlewares/auth";
 import { UnauthorizedException } from "@/utils/exceptions";
+import { WEB_URL } from "@/utils/constants";
 
 export const router = new Hono();
 
@@ -43,12 +44,7 @@ router
 
     await AuthService.verifyUser(user);
 
-    return c.json(
-      {
-        message: "Your email has been verified successfully.",
-      },
-      200,
-    );
+    return c.redirect(`${WEB_URL}/verify-email-success`, 200);
   })
   .post(
     "/forgot-password",

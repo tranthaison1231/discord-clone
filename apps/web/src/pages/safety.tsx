@@ -1,6 +1,3 @@
-
 export default function Component() {
-  return (
-    <div>Safety</div>
-  )
+  return <div>Safety</div>;
 }
