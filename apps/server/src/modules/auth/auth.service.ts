@@ -10,6 +10,19 @@ import { JWT_SECRET, WEB_URL } from "@/utils/constants";
 export const ACCESS_TOKEN_EXPIRE_IN = 60 * 60;
 
 export class AuthService {
+  static async verifyUser(user: User) {
+    if (!user.isVerified) {
+      db.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          isVerified: true,
+        },
+      });
+    }
+  }
+
   static async sendVerifyEmail(user: User) {
     const accessToken = AuthService.createToken(user.id);
     return mailService.sendMail({
