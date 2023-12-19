@@ -2,8 +2,8 @@ import { db } from "@/lib/db";
 import { Prisma } from "@prisma/client";
 import { BadRequestException } from "@/utils/exceptions";
 
-export class OrgsService {
-  static async getAll(userId: string, { page = 1, limit = 10, search = "" }) {
+export const OrgsService = {
+  getAll: async (userId: string, { page = 1, limit = 10, search = "" }) => {
     const orgs = await db.org.findMany({
       skip: (page - 1) * limit,
       take: limit,
@@ -28,9 +28,8 @@ export class OrgsService {
       total: total,
       totalPage: Math.ceil(total / limit),
     };
-  }
-
-  static async getBy(orgId: string) {
+  },
+  getBy: async (orgId: string) => {
     const org = await db.org.findFirst({
       where: {
         id: orgId,
@@ -41,13 +40,30 @@ export class OrgsService {
     }
 
     return org;
-  }
-
-  static async create(org: Prisma.OrgCreateInput) {
+  },
+  create: async (org: Prisma.OrgCreateInput) => {
     const createdOrg = await db.org.create({
       data: org,
     });
 
     return createdOrg;
-  }
-}
+  },
+  getRoles: async (orgId: string) => {
+    const roles = db.role.findMany({
+      where: {
+        orgId: orgId,
+      },
+    });
+    return roles;
+  },
+  createRole: async (orgId: string, createRoleDto: Prisma.RoleCreateInput) => {
+    const role = await db.role.create({
+      data: {
+        orgId: orgId,
+        name: createRoleDto.name,
+        color: createRoleDto.color,
+      },
+    });
+    return role;
+  },
+};

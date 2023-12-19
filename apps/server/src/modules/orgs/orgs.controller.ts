@@ -3,6 +3,8 @@ import { paginationSchema } from "@/utils/schema";
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { OrgsService } from "./orgs.service";
+import { createOrgDto } from "./dto/create-org.dto";
+import { createRoleDto } from "./dto/create-role.dto";
 
 export const router = new Hono();
 
@@ -28,10 +30,10 @@ router
 
     return c.json(org);
   })
-  .post("/", async (c) => {
+  .post("/", zValidator("json", createOrgDto), async (c) => {
     const user = c.get("user");
 
-    const { name, icon } = await c.req.json<{ name: string; icon: string }>();
+    const { name, icon } = await c.req.json();
 
     const org = await OrgsService.create({
       userId: user.id,
@@ -41,6 +43,32 @@ router
 
     return c.json(org);
   })
+  .get("/:orgId/roles", async (c) => {
+    const orgId = c.req.param("orgId");
+    const roles = await OrgsService.getRoles(orgId);
+
+    return c.json(
+      {
+        data: roles,
+        status: 200,
+      },
+      200,
+    );
+  })
+  .post("/:orgId/roles", zValidator("json", createRoleDto), async (c) => {
+    const orgId = c.req.param("orgId");
+    const createRoleDto = await c.req.json();
+    const role = await OrgsService.createRole(orgId, createRoleDto);
+
+    return c.json(
+      {
+        data: role,
+        status: 201,
+      },
+      201,
+    );
+  })
+
   .get("/:orgId/channels", (c) =>
     c.json([
       {
