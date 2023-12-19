@@ -2,7 +2,7 @@ import { signIn } from "@/apis/auth";
 import bgAuth from "@/assets/images/bg-auth.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { LoginSchema } from "@/lib/shema";
+import { LoginSchema } from "@/lib/schema";
 import { getToken, setToken } from "@/lib/storage";
 import { Link } from "@/router";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -58,7 +58,7 @@ export default function Component() {
   };
   return (
     <div className="h-screen relative w-full">
-      <img src={bgAuth} className="w-full h-full object-cover" />
+      <img src={bgAuth} className="w-full h-full object-cover" alt="" />
       <div className="p-2 w-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-xl md:max-w-3xl">
         <div className="w-full p-8 flex gap-20 bg-gray-800 rounded-sm text-white">
           <div className="w-full">
