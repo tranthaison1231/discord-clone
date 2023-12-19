@@ -7,7 +7,7 @@ import { JWT_SECRET } from "@/utils/constants";
 export const auth = async (c: Context, next: Next) => {
   try {
     const authHeader = c.req.header("Authorization");
-    const token = authHeader && authHeader.split(" ")[1];
+    const token = authHeader?.split(" ")[1];
     if (!token) {
       throw new UnauthorizedException("Unauthorized");
     }
@@ -19,6 +19,10 @@ export const auth = async (c: Context, next: Next) => {
         id: data.userId,
       },
     });
+
+    if (!user.isVerified) {
+      throw new UnauthorizedException("User is not verified");
+    }
 
     c.set("user", user);
 

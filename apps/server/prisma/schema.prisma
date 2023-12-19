@@ -34,12 +34,13 @@ model Role {
 }
 
 model User {
-  id       String        @id @default(cuid())
-  email    String        @unique
-  password String
-  salt     String
-  orgs     UsersOnOrgs[]
-  fullName String?
+  id         String        @id @default(cuid())
+  email      String        @unique
+  password   String
+  salt       String
+  orgs       UsersOnOrgs[]
+  fullName   String?
+  isVerified Boolean       @default(false)
 
   @@map("users")
 }

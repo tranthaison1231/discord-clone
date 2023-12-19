@@ -26,6 +26,7 @@ Table users {
   salt String [not null]
   orgs users_on_orgs [not null]
   fullName String
+  isVerified Boolean [not null, default: false]
 }
 
 Table channels {

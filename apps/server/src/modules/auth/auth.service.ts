@@ -10,6 +10,15 @@ import { JWT_SECRET, WEB_URL } from "@/utils/constants";
 export const ACCESS_TOKEN_EXPIRE_IN = 60 * 60;
 
 export class AuthService {
+  static async sendVerifyEmail(user: User) {
+    const accessToken = AuthService.createToken(user.id);
+    return mailService.sendMail({
+      to: user.email,
+      html: `Click <a href="${WEB_URL}/verify-email?token=${accessToken}">here</a> to verify email!`,
+      subject: "Verify Email",
+    });
+  }
+
   static async signIn(email: string, password: string) {
     const user = await db.user.findUnique({
       where: {
@@ -23,10 +32,10 @@ export class AuthService {
     const isValid = await bcrypt.compare(password, user.password);
 
     if (!isValid) {
-      throw new UnauthorizedException(`Invalid password`);
+      throw new UnauthorizedException("Invalid password");
     }
 
-    const accessToken = this.createToken(user.id);
+    const accessToken = AuthService.createToken(user.id);
 
     return { accessToken };
   }
@@ -34,7 +43,7 @@ export class AuthService {
   static async signUp(email: string, password: string) {
     try {
       if (!email || !password) {
-        throw new BadRequestException(`Email and password are required`);
+        throw new BadRequestException("Email and password are required");
       }
 
       const salt = bcrypt.genSaltSync();
@@ -55,9 +64,8 @@ export class AuthService {
         error.code === "P2002"
       ) {
         throw new UnauthorizedException(`User ${email} already exists`);
-      } else {
-        throw error;
       }
+      throw error;
     }
   }
 
@@ -76,7 +84,7 @@ export class AuthService {
     if (!user) {
       throw new BadRequestException(`Email ${email} not found`);
     }
-    const accessToken = this.createToken(user.id);
+    const accessToken = AuthService.createToken(user.id);
 
     await mailService.sendMail({
       to: email,
@@ -90,7 +98,7 @@ export class AuthService {
 
     if (isSamePassword) {
       throw new BadRequestException(
-        `New password cannot be the same as old password`,
+        "New password cannot be the same as old password",
       );
     }
 
