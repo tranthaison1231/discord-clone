@@ -34,7 +34,7 @@ router
       201,
     );
   })
-  .get("/verify", async (c) => {
+  .get("/verify-email", async (c) => {
     const token = c.req.query("token");
 
     if (!token) throw new UnauthorizedException("Missing token");
