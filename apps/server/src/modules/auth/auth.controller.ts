@@ -44,7 +44,7 @@ router
 
     await AuthService.verifyUser(user);
 
-    return c.redirect(`${WEB_URL}/verify-email-success`, 200);
+    return c.redirect(`${WEB_URL}/verify-email-success`, 302);
   })
   .post(
     "/forgot-password",
