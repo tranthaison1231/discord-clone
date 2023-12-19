@@ -11,16 +11,15 @@ export const ACCESS_TOKEN_EXPIRE_IN = 60 * 60;
 
 export const AuthService = {
   verifyUser: async (user: User) => {
-    if (!user.isVerified) {
-      db.user.update({
-        where: {
-          id: user.id,
-        },
-        data: {
-          isVerified: true,
-        },
-      });
-    }
+    if (user.isVerified) return;
+    return db.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        isVerified: true,
+      },
+    });
   },
   sendVerifyEmail: async (user: User) => {
     const accessToken = AuthService.createToken(user);
