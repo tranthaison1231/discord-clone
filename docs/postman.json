@@ -1,22 +1,19 @@
 {
 	"info": {
-		"_postman_id": "97e0c1dd-e3be-42de-a76c-a114887c51a8",
-		"name": "Discord",
+		"_postman_id": "9a07f825-a87f-4140-aed0-d361324ce736",
+		"name": "discord-clone",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "9202600"
 	},
 	"item": [
 		{
 			"name": "sign-in",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\": \"son.tran@gmail.com\",\n    \"password\": \"!Enouvo123\"\n}",
+					"raw": "{\n    \"email\": \"son.tran@enouvo.com\",\n    \"password\": \"!Enouvo123425\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -24,12 +21,13 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/sign-in",
-					"protocol": "http",
+					"raw": "https://discord-api-five.vercel.app/api/sign-in",
+					"protocol": "https",
 					"host": [
-						"localhost"
+						"discord-api-five",
+						"vercel",
+						"app"
 					],
-					"port": "3000",
 					"path": [
 						"api",
 						"sign-in"
@@ -44,13 +42,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://discord-api-five.vercel.app/api/orgs/1/channels/1/members",
-					"protocol": "https",
+					"raw": "http://localhost:3000/api/orgs/1/channels/1/members",
+					"protocol": "http",
 					"host": [
-						"discord-api-five",
-						"vercel",
-						"app"
+						"localhost"
 					],
+					"port": "3000",
 					"path": [
 						"api",
 						"orgs",
@@ -66,11 +63,21 @@
 		{
 			"name": "/orgs",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbHFjYzMydmowMDAwbGZjZjlzMTAzNzJ5IiwiaXNWZXJpZmllZCI6dHJ1ZSwiaWF0IjoxNzAyOTkwNTc5LCJleHAiOjE3MDI5OTQxNzl9.Vko3YsSTeBVHBVtzTXCRehLjklui_fG8IGnaM-gqvYo",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"Enouvo\",\n    \"icon\": \"https://enouvo.com/wp-content/uploads/2022/07/cropped-logo-vien-trang-file-in-01.png\"\n}",
+					"raw": "{\n   \n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -95,10 +102,20 @@
 		{
 			"name": "/orgs",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbHFjYzMydmowMDAwbGZjZjlzMTAzNzJ5IiwiaXNWZXJpZmllZCI6dHJ1ZSwiaWF0IjoxNzAyOTkwNTc5LCJleHAiOjE3MDI5OTQxNzl9.Vko3YsSTeBVHBVtzTXCRehLjklui_fG8IGnaM-gqvYo",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/orgs",
+					"raw": "http://localhost:3000/api/orgs?limit=5",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -107,6 +124,209 @@
 					"path": [
 						"api",
 						"orgs"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/sign-up",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"son.tran@enouvo.com\",\n    \"password\": \"!Enouvo123425\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://discord-api-five.vercel.app/api/sign-up",
+					"protocol": "https",
+					"host": [
+						"discord-api-five",
+						"vercel",
+						"app"
+					],
+					"path": [
+						"api",
+						"sign-up"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/forgot-password",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"thaison.coderstokyo@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/forgot-password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"forgot-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/reset-password",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbHEweDY3emQwMDAwazByaG4xemlldmk5IiwiaWF0IjoxNzAyMzgwNzk0LCJleHAiOjE3MDIzODQzOTR9.kQmbnKECR59IQt6BaLA1Kq-Aq_VJexvhWC-gNBNqnu4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"password\": \"Enouvo124124\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/reset-password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"reset-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/verify-email",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/verify-email?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbHFjYzMydmowMDAwbGZjZjlzMTAzNzJ5IiwiaXNWZXJpZmllZCI6ZmFsc2UsImlhdCI6MTcwMjk4OTY3OSwiZXhwIjoxNzAyOTkzMjc5fQ.Unhe_XnWqwtm1xE6ddv0IbzRi5rLSAuMQqwRLJwcSQ0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"verify-email"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbHFjYzMydmowMDAwbGZjZjlzMTAzNzJ5IiwiaXNWZXJpZmllZCI6ZmFsc2UsImlhdCI6MTcwMjk4OTY3OSwiZXhwIjoxNzAyOTkzMjc5fQ.Unhe_XnWqwtm1xE6ddv0IbzRi5rLSAuMQqwRLJwcSQ0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/orgs/:orgId/roles",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbHFjYzMydmowMDAwbGZjZjlzMTAzNzJ5IiwiaXNWZXJpZmllZCI6dHJ1ZSwiaWF0IjoxNzAyOTkwNTc5LCJleHAiOjE3MDI5OTQxNzl9.Vko3YsSTeBVHBVtzTXCRehLjklui_fG8IGnaM-gqvYo",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/orgs/clqcd5nkm00004quorpoq3mqi/roles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"orgs",
+						"clqcd5nkm00004quorpoq3mqi",
+						"roles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/orgs/:orgId/roles",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbHFjYzMydmowMDAwbGZjZjlzMTAzNzJ5IiwiaXNWZXJpZmllZCI6dHJ1ZSwiaWF0IjoxNzAyOTkwNTc5LCJleHAiOjE3MDI5OTQxNzl9.Vko3YsSTeBVHBVtzTXCRehLjklui_fG8IGnaM-gqvYo",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Admin\",\n    \"color\": \"red\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/orgs/clqcd5nkm00004quorpoq3mqi/roles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"orgs",
+						"clqcd5nkm00004quorpoq3mqi",
+						"roles"
 					]
 				}
 			},
