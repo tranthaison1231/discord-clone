@@ -22,7 +22,7 @@ export default function OrgSidebar({ orgs = [] }: OrgSidebarProps) {
           />
           <img
             onClick={() =>
-              navigate(`/channels/:orgID/:channelID`, {
+              navigate("/channels/:orgID/:channelID", {
                 params: { orgID: org.id, channelID: "1" },
               })
             }
