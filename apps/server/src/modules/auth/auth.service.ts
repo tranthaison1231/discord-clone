@@ -5,12 +5,12 @@ import { hashPassword } from "@/utils/password";
 import * as bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { mailService } from "@/lib/mail.service";
-import { JWT_SECRET, WEB_URL } from "@/utils/constants";
+import { JWT_SECRET, WEB_URL, API_URL } from "@/utils/constants";
 
 export const ACCESS_TOKEN_EXPIRE_IN = 60 * 60;
 
-export class AuthService {
-  static async verifyUser(user: User) {
+export const AuthService = {
+  verifyUser: async (user: User) => {
     if (!user.isVerified) {
       db.user.update({
         where: {
@@ -21,18 +21,16 @@ export class AuthService {
         },
       });
     }
-  }
-
-  static async sendVerifyEmail(user: User) {
-    const accessToken = AuthService.createToken(user.id);
+  },
+  sendVerifyEmail: async (user: User) => {
+    const accessToken = AuthService.createToken(user);
     return mailService.sendMail({
       to: user.email,
-      html: `Click <a href="${WEB_URL}/verify-email?token=${accessToken}">here</a> to verify email!`,
+      html: `Click <a href="${API_URL}/verify-email?token=${accessToken}">here</a> to verify email!`,
       subject: "Verify Email",
     });
-  }
-
-  static async signIn(email: string, password: string) {
+  },
+  signIn: async (email: string, password: string) => {
     const user = await db.user.findUnique({
       where: {
         email: email,
@@ -41,6 +39,11 @@ export class AuthService {
     if (!user) {
       throw new UnauthorizedException(`Email ${email} not found`);
     }
+    if (!user.isVerified) {
+      throw new UnauthorizedException(
+        "Email not verified! Please verify your email before login",
+      );
+    }
 
     const isValid = await bcrypt.compare(password, user.password);
 
@@ -48,12 +51,11 @@ export class AuthService {
       throw new UnauthorizedException("Invalid password");
     }
 
-    const accessToken = AuthService.createToken(user.id);
+    const accessToken = AuthService.createToken(user);
 
     return { accessToken };
-  }
-
-  static async signUp(email: string, password: string) {
+  },
+  signUp: async (email: string, password: string) => {
     try {
       if (!email || !password) {
         throw new BadRequestException("Email and password are required");
@@ -80,15 +82,17 @@ export class AuthService {
       }
       throw error;
     }
-  }
-
-  static createToken(userId: string) {
-    return jwt.sign({ userId: userId }, JWT_SECRET, {
-      expiresIn: ACCESS_TOKEN_EXPIRE_IN,
-    });
-  }
-
-  static async forgotPassword(email: string) {
+  },
+  createToken: (user: User) => {
+    return jwt.sign(
+      { userId: user.id, isVerified: user.isVerified },
+      JWT_SECRET,
+      {
+        expiresIn: ACCESS_TOKEN_EXPIRE_IN,
+      },
+    );
+  },
+  forgotPassword: async (email: string) => {
     const user = await db.user.findUnique({
       where: {
         email: email,
@@ -97,16 +101,15 @@ export class AuthService {
     if (!user) {
       throw new BadRequestException(`Email ${email} not found`);
     }
-    const accessToken = AuthService.createToken(user.id);
+    const accessToken = AuthService.createToken(user);
 
     await mailService.sendMail({
       to: email,
       html: `Click <a href="${WEB_URL}/reset-password?token=${accessToken}">here</a> to reset your password`,
       subject: "Reset  password",
     });
-  }
-
-  static async resetPassword(user: User, newPassword: string) {
+  },
+  resetPassword: async (user: User, newPassword: string) => {
     const isSamePassword = await bcrypt.compare(newPassword, user.password);
 
     if (isSamePassword) {
@@ -127,5 +130,5 @@ export class AuthService {
         salt: salt,
       },
     });
-  }
-}
+  },
+};
