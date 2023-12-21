@@ -9,23 +9,23 @@ const orgSchema = z.object({
 
 export const getOrgs = async () => {
   const res = await request.get("/orgs");
-  console.log(res.data);
   return orgSchema.array().parse(res.data.data);
 };
 
-interface Member {
-  id: string;
-  displayName: string;
-  username: string;
-  avatar: string;
-  memberSince: string;
-  joinedDiscord: string;
-  joinMethod: string;
-  roles: string[];
-}
+const memberSchema = z.object({
+  id: z.string(),
+  displayName: z.string(),
+  username: z.string(),
+  avatar: z.string(),
+  memberSince: z.string(),
+  joinedDiscord: z.string(),
+  joinMethod: z.string(),
+  roles: z.array(z.string()),
+});
 
 export const getOrgMembers = async (orgID: string) => {
-  return request.get<Member[]>(`/orgs/${orgID}/members`);
+  const rest = await request.get(`/orgs/${orgID}/members`);
+  return memberSchema.array().parse(rest.data);
 };
 
 export const getOrg = async (orgID: string) => {

@@ -1,17 +1,24 @@
-import { getOrgMembers } from '@/apis/orgs';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Link, useParams } from '@/router';
-import { HelpCircle, Users } from 'lucide-react';
-import { useQuery } from 'react-query';
-import { useLocation } from 'react-router-dom';
-
-
+import { getOrgMembers } from "@/apis/orgs";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Link, useParams } from "@/router";
+import { HelpCircle, Users } from "lucide-react";
+import { useQuery } from "react-query";
+import { useLocation } from "react-router-dom";
 
 export default function Component() {
-  const { orgID} = useParams('/channels/:orgID/member-safety');
-  const location = useLocation()
-  const { data: membersResult } = useQuery(['members'], () => getOrgMembers(orgID));
+  const { orgID } = useParams("/channels/:orgID/member-safety");
+  const location = useLocation();
+  const { data: membersResult } = useQuery(["members"], () =>
+    getOrgMembers(orgID),
+  );
 
   return (
     <div>
@@ -53,7 +60,7 @@ export default function Component() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {membersResult?.data?.map((member) => (
+              {membersResult?.map((member) => (
                 <TableRow key={member.id}>
                   <TableCell className="gap-2 flex items-center">
                     <Checkbox />
