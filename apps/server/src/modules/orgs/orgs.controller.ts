@@ -5,6 +5,8 @@ import { Hono } from "hono";
 import { OrgsService } from "./orgs.service";
 import { createOrgDto } from "./dto/create-org.dto";
 import { createRoleDto } from "./dto/create-role.dto";
+import { ChannelsService } from "../channels/channels.service";
+import { createChannelDto } from "../channels/dto/create-channel.dto";
 
 export const router = new Hono();
 
@@ -68,43 +70,25 @@ router
       201,
     );
   })
+  .get("/:orgId/channels", async (c) => {
+    const orgId = c.req.param("orgId");
+    const channels = await ChannelsService.getAllBy(orgId);
 
-  .get("/:orgId/channels", (c) =>
-    c.json([
-      {
-        id: "1",
-        name: "Class 1",
-        category: {
-          id: 1,
-          name: "Class",
-        },
-      },
-      {
-        id: "2",
-        name: "Class 2",
-        category: {
-          id: 1,
-          name: "Class",
-        },
-      },
-      {
-        id: "3",
-        name: "Class 1",
-        category: {
-          id: 2,
-          name: "Class Audio",
-        },
-      },
-      {
-        id: "4",
-        name: "Class 2",
-        category: {
-          id: 2,
-          name: "Class Audio",
-        },
-      },
-    ]),
-  )
+    return c.json({
+      data: channels,
+      status: 200,
+    });
+  })
+  .post("/:orgId/channels", zValidator("json", createChannelDto), async (c) => {
+    const orgId = c.req.param("orgId");
+    const createChannelDto = await c.req.json();
+    const channel = await ChannelsService.create(orgId, createChannelDto);
+
+    return c.json({
+      data: channel,
+      status: 201,
+    });
+  })
   .get("/:orgId/members", async (c) => {
     const orgId = c.req.param("orgId");
 
@@ -114,20 +98,10 @@ router
       },
     });
 
-    console.log(members);
-
-    c.json([
-      {
-        id: "001",
-        displayName: "John Doe",
-        username: "john_doe",
-        avatar: "https://sukienvietsky.com/upload/news/son-tung-mtp-7359.jpeg",
-        memberSince: "2022-01-01",
-        joinedDiscord: "2022-01-01",
-        joinMethod: "Discord",
-        roles: ["Admin"],
-      },
-    ]);
+    return c.json({
+      data: members,
+      status: 200,
+    });
   })
   .post("/:orgId/members", async (c) => {
     const orgId = c.req.param("orgId");
@@ -138,20 +112,10 @@ router
       },
     });
 
-    console.log(members);
-
-    c.json([
-      {
-        id: "001",
-        displayName: "John Doe",
-        username: "john_doe",
-        avatar: "https://sukienvietsky.com/upload/news/son-tung-mtp-7359.jpeg",
-        memberSince: "2022-01-01",
-        joinedDiscord: "2022-01-01",
-        joinMethod: "Discord",
-        roles: ["Admin"],
-      },
-    ]);
+    return c.json({
+      data: members,
+      status: 200,
+    });
   })
   .get("/:orgId/channels/:channelId/messages", (c) =>
     c.json([
