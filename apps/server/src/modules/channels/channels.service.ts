@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { BadRequestException } from "@/utils/exceptions";
 import { Prisma } from "@prisma/client";
 
 export const ChannelsService = {
@@ -27,10 +28,68 @@ export const ChannelsService = {
         id: channelId,
       },
       include: {
-        members: true,
+        members: {
+          include: {
+            user: {
+              select: {
+                email: true,
+                id: true,
+                fullName: true,
+              },
+            },
+          },
+        },
       },
     });
 
     return channel;
+  },
+  async delete(channelId: string) {
+    try {
+      return await db.channel.delete({
+        where: {
+          id: channelId,
+        },
+      });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === "P2025"
+      ) {
+        throw new BadRequestException("Channel not found");
+      }
+      throw error;
+    }
+  },
+  async update(channelId: string, updateChannelDto: Prisma.ChannelUpdateInput) {
+    const updatedChannel = await db.channel.update({
+      where: {
+        id: channelId,
+      },
+      data: updateChannelDto,
+    });
+    return updatedChannel;
+  },
+  async addMember(channelId: string, memberId: string) {
+    const updatedChannel = await db.channel.update({
+      where: {
+        id: channelId,
+      },
+      data: {
+        members: {
+          create: [
+            {
+              user: {
+                connect: {
+                  id: memberId,
+                },
+              },
+            },
+          ],
+        },
+      },
+    });
+
+    return updatedChannel;
   },
 };

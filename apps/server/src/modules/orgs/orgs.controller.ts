@@ -6,7 +6,7 @@ import { OrgsService } from "./orgs.service";
 import { createOrgDto } from "./dto/create-org.dto";
 import { createRoleDto } from "./dto/create-role.dto";
 import { ChannelsService } from "../channels/channels.service";
-import { createChannelDto } from "../channels/dto/create-channel.dto";
+import { upsertChannelDto } from "../channels/dto/channel.dto";
 
 export const router = new Hono();
 
@@ -79,7 +79,7 @@ router
       status: 200,
     });
   })
-  .post("/:orgId/channels", zValidator("json", createChannelDto), async (c) => {
+  .post("/:orgId/channels", zValidator("json", upsertChannelDto), async (c) => {
     const orgId = c.req.param("orgId");
     const createChannelDto = await c.req.json();
     const channel = await ChannelsService.create(orgId, createChannelDto);

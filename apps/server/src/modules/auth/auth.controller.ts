@@ -58,8 +58,9 @@ router
         {
           message:
             "We have sent a password reset link to your email. Please check your email.",
+          status: 200,
         },
-        201,
+        200,
       );
     },
   )
