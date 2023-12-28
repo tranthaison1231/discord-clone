@@ -107,7 +107,7 @@ Enum ChannelType {
 
 Ref: roles.orgId > orgs.id
 
-Ref: messages.senderId > users.id
+Ref: messages.senderId > users.id [delete: Cascade]
 
 Ref: messages.channelId > channels.id [delete: Cascade]
 

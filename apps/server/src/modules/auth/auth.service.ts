@@ -6,6 +6,9 @@ import * as bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { mailService } from "@/lib/mail.service";
 import { JWT_SECRET, WEB_URL, API_URL } from "@/utils/constants";
+import { render } from "@react-email/render";
+import { VerifyEmail } from "@/emails/verify-email";
+import { ForgotPassword } from "@/emails/forgot-password";
 
 export const ACCESS_TOKEN_EXPIRE_IN = 60 * 60;
 
@@ -23,10 +26,15 @@ export const AuthService = {
   },
   sendVerifyEmail: async (user: User) => {
     const accessToken = AuthService.createToken(user);
+
+    const emailHtml = render(
+      VerifyEmail({ url: `${API_URL}/verify-email?token=${accessToken}` }),
+    );
+
     return mailService.sendMail({
       to: user.email,
-      html: `Click <a href="${API_URL}/verify-email?token=${accessToken}">here</a> to verify email!`,
       subject: "Verify Email",
+      html: emailHtml,
     });
   },
   signIn: async (email: string, password: string) => {
@@ -102,9 +110,13 @@ export const AuthService = {
     }
     const accessToken = AuthService.createToken(user);
 
+    const forgotPasswordEmail = render(
+      ForgotPassword({ url: `${WEB_URL}/reset-password?token=${accessToken}` }),
+    );
+
     await mailService.sendMail({
       to: email,
-      html: `Click <a href="${WEB_URL}/reset-password?token=${accessToken}">here</a> to reset your password`,
+      html: forgotPasswordEmail,
       subject: "Reset  password",
     });
   },
