@@ -7,6 +7,8 @@ import { createOrgDto } from "./dto/create-org.dto";
 import { createRoleDto } from "./dto/create-role.dto";
 import { ChannelsService } from "../channels/channels.service";
 import { upsertChannelDto } from "../channels/dto/channel.dto";
+import { upsertCategoryDto } from "../categories/dto/create-category.dto";
+import { CategoriesService } from "../categories/categories.service";
 
 export const router = new Hono();
 
@@ -30,7 +32,10 @@ router
 
     const org = await OrgsService.getBy(orgId);
 
-    return c.json(org);
+    return c.json({
+      data: org,
+      status: 200,
+    });
   })
   .post("/", zValidator("json", createOrgDto), async (c) => {
     const user = c.get("user");
@@ -82,7 +87,7 @@ router
   .post("/:orgId/channels", zValidator("json", upsertChannelDto), async (c) => {
     const orgId = c.req.param("orgId");
     const createChannelDto = await c.req.json();
-    const channel = await ChannelsService.create(orgId, createChannelDto);
+    const channel = await ChannelsService.createByOrg(orgId, createChannelDto);
 
     return c.json({
       data: channel,
@@ -117,6 +122,23 @@ router
       status: 200,
     });
   })
+  .post(
+    "/:orgId/categories",
+    zValidator("json", upsertCategoryDto),
+    async (c) => {
+      const orgId = c.req.param("orgId");
+      const createCategoryInput = await c.req.json();
+      const category = await CategoriesService.create(
+        orgId,
+        createCategoryInput,
+      );
+
+      return c.json({
+        data: category,
+        status: 201,
+      });
+    },
+  )
   .get("/:orgId/channels/:channelId/messages", (c) =>
     c.json([
       {

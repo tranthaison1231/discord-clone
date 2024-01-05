@@ -34,6 +34,13 @@ export const OrgsService = {
       where: {
         id: orgId,
       },
+      include: {
+        categories: {
+          include: {
+            channels: true,
+          },
+        },
+      },
     });
     if (!org) {
       throw new BadRequestException("Org not found!");

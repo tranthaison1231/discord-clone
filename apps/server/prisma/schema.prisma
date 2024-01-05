@@ -20,8 +20,22 @@ model Org {
   users        UsersOnOrgs[]
   Role         Role[]
   UsersOnRoles UsersOnRoles[]
+  categories   Category[]
+  channels     Channel[]
 
   @@map("orgs")
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String
+  orgId     String
+  org       Org       @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  isPrivate Boolean   @default(false)
+  channels  Channel[]
+
+  @@index([orgId], name: "orgId")
+  @@map("categories")
 }
 
 model Blog {
@@ -68,14 +82,19 @@ enum ChannelType {
 }
 
 model Channel {
-  id        String            @id @default(cuid())
-  name      String
-  orgId     String
-  type      ChannelType
-  isPrivate Boolean           @default(false)
-  members   UsersOnChannels[]
-  messages  Message[]
+  id         String            @id @default(cuid())
+  name       String
+  orgId      String?
+  org        Org?              @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  type       ChannelType
+  isPrivate  Boolean           @default(false)
+  members    UsersOnChannels[]
+  messages   Message[]
+  categoryId String?
+  category   Category?         @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
+  @@index([categoryId], name: "categoryId")
+  @@index([orgId])
   @@map("channels")
 }
 

@@ -10,6 +10,17 @@ Table orgs {
   users users_on_orgs [not null]
   Role roles [not null]
   UsersOnRoles users_on_roles [not null]
+  categories categories [not null]
+  channels channels [not null]
+}
+
+Table categories {
+  id String [pk]
+  name String [not null]
+  orgId String [not null]
+  org orgs [not null]
+  isPrivate Boolean [not null, default: false]
+  channels channels [not null]
 }
 
 Table blogs {
@@ -44,11 +55,14 @@ Table users {
 Table channels {
   id String [pk]
   name String [not null]
-  orgId String [not null]
+  orgId String
+  org orgs
   type ChannelType [not null]
   isPrivate Boolean [not null, default: false]
   members users_on_channels [not null]
   messages messages [not null]
+  categoryId String
+  category categories
 }
 
 Table messages {
@@ -105,7 +119,13 @@ Enum ChannelType {
   STAGE
 }
 
+Ref: categories.orgId > orgs.id [delete: Cascade]
+
 Ref: roles.orgId > orgs.id
+
+Ref: channels.orgId > orgs.id [delete: Cascade]
+
+Ref: channels.categoryId > categories.id [delete: Cascade]
 
 Ref: messages.senderId > users.id [delete: Cascade]
 
