@@ -1,21 +1,14 @@
 import { getChannels } from "@/apis/channels";
 import { cn } from "@/lib/utils";
 import { Link, useParams } from "@/router";
-import { groupBy } from "lodash-es";
-import {
-  ChevronDown,
-  Grip,
-  Headphones,
-  Home,
-  Mic,
-  Plus,
-  Users,
-} from "lucide-react";
+import { ChevronDown, Grip, Headphones, Mic, Users } from "lucide-react";
 import { useQuery } from "react-query";
 import { Outlet, useNavigate } from "react-router-dom";
 import SettingModal from "./_components/SettingModal";
 import EventsModal from "./_components/EventsModal";
 import { getOrg } from "@/apis/orgs";
+import AddChannelModal from "./_components/AddChannelModal";
+import OrgMenuDropDown from "./_components/OrgMenuDropDown";
 
 export default function Component() {
   const { channelID, orgID } = useParams("/channels/:orgID/:channelID");
@@ -34,13 +27,7 @@ export default function Component() {
   return (
     <div className="w-full flex">
       <div className="relative bg-primary-foreground/10 text-primary-foreground 0 w-[16rem] flex flex-col">
-        <div className="border-b h-14 border-primary-foreground/10 p-3 flex items-center justify-between">
-          <div className="flex gap-2 text-2xl items-center">
-            <Home />
-            <h1 className="font-bold"> {org?.name} </h1>
-          </div>
-          <ChevronDown />
-        </div>
+        <OrgMenuDropDown org={org} />
         <div className="h-3/4 overflow-scroll">
           <div className="text-xl text-primary-foreground/60 pl-2 pt-2">
             <EventsModal />
@@ -66,33 +53,31 @@ export default function Component() {
           </div>
           <div className="px-2 text-primary-foreground/60">
             <hr className="h-2 my-4 border-primary-foreground/60" />
-            {Object.entries(groupBy(channels, "category.name"))?.map(
-              ([category, channels]) => (
-                <div key={category}>
-                  <div className="flex gap-2 justify-between">
-                    <div className="flex gap-2">
-                      <ChevronDown className="w-4" />
-                      <h1 className="uppercase"> {category} </h1>
-                    </div>
-                    <Plus />
+            {org?.categories.map((category) => (
+              <div key={category.id}>
+                <div className="flex gap-2 justify-between">
+                  <div className="flex gap-2">
+                    <ChevronDown className="w-4" />
+                    <h1 className="uppercase"> {category.name} </h1>
                   </div>
-                  <div className="py-4 space-y-2">
-                    {channels.map((channel) => (
-                      <div
-                        className={cn("px-6 py-3 cursor-pointer", {
-                          "bg-primary-foreground/20 text-primary-foreground/80":
-                            channel.id === channelID,
-                        })}
-                        key={channel.id}
-                        onClick={() => navigateToChannel(channel.id)}
-                      >
-                        {channel.name}
-                      </div>
-                    ))}
-                  </div>
+                  <AddChannelModal />
                 </div>
-              ),
-            )}
+                <div className="py-4 space-y-2">
+                  {category.channels?.map((channel) => (
+                    <div
+                      className={cn("px-6 py-3 cursor-pointer", {
+                        "bg-primary-foreground/20 text-primary-foreground/80":
+                          channel.id === channelID,
+                      })}
+                      key={channel.id}
+                      onClick={() => navigateToChannel(channel.id)}
+                    >
+                      {channel.name}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
         <div className="absolute bottom-0 p-3 flex justify-between items-center w-full">

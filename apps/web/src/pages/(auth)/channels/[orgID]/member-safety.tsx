@@ -16,10 +16,9 @@ import { useLocation } from "react-router-dom";
 export default function Component() {
   const { orgID } = useParams("/channels/:orgID/member-safety");
   const location = useLocation();
-  const { data: membersResult } = useQuery(["members"], () =>
-    getOrgMembers(orgID),
-  );
+  const { data: members } = useQuery(["members"], () => getOrgMembers(orgID));
 
+  console.log(members);
   return (
     <div>
       <header className="p-3 h-14 border-b bg-primary-foreground/20  text-2xl flex items-center justify-between">
@@ -60,7 +59,7 @@ export default function Component() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {membersResult?.map((member) => (
+              {members?.map((member) => (
                 <TableRow key={member.id}>
                   <TableCell className="gap-2 flex items-center">
                     <Checkbox />
