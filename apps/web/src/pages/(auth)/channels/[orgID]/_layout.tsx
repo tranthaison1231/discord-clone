@@ -1,28 +1,26 @@
 import { getChannels } from "@/apis/channels";
-import { cn } from "@/lib/utils";
 import { Link, useParams } from "@/router";
-import { ChevronDown, Grip, Headphones, Mic, Users } from "lucide-react";
-import { useQuery } from "react-query";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Grip, Headphones, Mic, Users } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { Outlet } from "react-router-dom";
 import SettingModal from "./_components/SettingModal";
 import EventsModal from "./_components/EventsModal";
 import { getOrg } from "@/apis/orgs";
-import AddChannelModal from "./_components/AddChannelModal";
 import OrgMenuDropDown from "./_components/OrgMenuDropDown";
+import CategorySection from "./_components/CategorySection";
 
 export default function Component() {
   const { channelID, orgID } = useParams("/channels/:orgID/:channelID");
-  const navigate = useNavigate();
 
-  const navigateToChannel = (id: string) => {
-    navigate(`/channels/${orgID}/${id}`);
-  };
+  const { data: channels } = useQuery({
+    queryKey: ["channels", orgID],
+    queryFn: () => getChannels(orgID),
+  });
 
-  const { data: channels } = useQuery(["channels", orgID], () =>
-    getChannels(orgID),
-  );
-
-  const { data: org } = useQuery(["orgs", orgID], () => getOrg(orgID));
+  const { data: org } = useQuery({
+    queryKey: ["orgs", orgID],
+    queryFn: () => getOrg(orgID),
+  });
 
   return (
     <div className="w-full flex">
@@ -54,29 +52,7 @@ export default function Component() {
           <div className="px-2 text-primary-foreground/60">
             <hr className="h-2 my-4 border-primary-foreground/60" />
             {org?.categories.map((category) => (
-              <div key={category.id}>
-                <div className="flex gap-2 justify-between">
-                  <div className="flex gap-2">
-                    <ChevronDown className="w-4" />
-                    <h1 className="uppercase"> {category.name} </h1>
-                  </div>
-                  <AddChannelModal />
-                </div>
-                <div className="py-4 space-y-2">
-                  {category.channels?.map((channel) => (
-                    <div
-                      className={cn("px-6 py-3 cursor-pointer", {
-                        "bg-primary-foreground/20 text-primary-foreground/80":
-                          channel.id === channelID,
-                      })}
-                      key={channel.id}
-                      onClick={() => navigateToChannel(channel.id)}
-                    >
-                      {channel.name}
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <CategorySection category={category} key={category.id} />
             ))}
           </div>
         </div>

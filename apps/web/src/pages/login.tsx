@@ -17,7 +17,7 @@ import * as z from "zod";
 export function Loader() {
   const isAuth = getToken();
   if (isAuth) {
-    return redirect("/orgs");
+    return redirect("/channels");
   }
   return null;
 }

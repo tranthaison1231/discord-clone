@@ -10,15 +10,18 @@ import {
 } from "@/components/ui/table";
 import { Link, useParams } from "@/router";
 import { HelpCircle, Users } from "lucide-react";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "react-router-dom";
 
 export default function Component() {
   const { orgID } = useParams("/channels/:orgID/member-safety");
   const location = useLocation();
-  const { data: members } = useQuery(["members"], () => getOrgMembers(orgID));
 
-  console.log(members);
+  const { data: members } = useQuery({
+    queryKey: ["members"],
+    queryFn: () => getOrgMembers(orgID),
+  });
+
   return (
     <div>
       <header className="p-3 h-14 border-b bg-primary-foreground/20  text-2xl flex items-center justify-between">

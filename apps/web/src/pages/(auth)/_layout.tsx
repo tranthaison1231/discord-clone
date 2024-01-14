@@ -3,7 +3,7 @@ import OrgSidebar from "@/components/OrgSidebar";
 import { getToken } from "@/lib/storage";
 import { redirect } from "@/router";
 import { useEffect } from "react";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Outlet } from "react-router-dom";
 
 export function Loader() {
@@ -19,7 +19,10 @@ export default function App() {
     document.documentElement.classList.add("dark");
   }, []);
 
-  const { data: orgs } = useQuery(["orgs"], () => getOrgs());
+  const { data: orgs } = useQuery({
+    queryKey: ["orgs"],
+    queryFn: () => getOrgs(),
+  });
 
   return (
     <div className="flex h-screen bg-background w-full text-primary-foreground">
