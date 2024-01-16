@@ -68,6 +68,8 @@ model User {
   roles      UsersOnRoles[]
   channels   UsersOnChannels[]
   messages   Message[]
+  friends    User[]            @relation("friends")
+  friendsOf  User[]            @relation("friends")
 
   @@map("users")
 }

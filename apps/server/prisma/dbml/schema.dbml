@@ -49,6 +49,8 @@ Table users {
   roles users_on_roles [not null]
   channels users_on_channels [not null]
   messages messages [not null]
+  friends users [not null]
+  friendsOf users [not null]
 }
 
 Table channels {
