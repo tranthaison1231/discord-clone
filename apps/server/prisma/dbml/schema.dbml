@@ -8,8 +8,7 @@ Table orgs {
   name String [not null]
   userId String [not null]
   users users_on_orgs [not null]
-  Role roles [not null]
-  UsersOnRoles users_on_roles [not null]
+  roles roles [not null]
   categories categories [not null]
   channels channels [not null]
 }
@@ -36,7 +35,7 @@ Table roles {
   color String [not null]
   orgId String [not null]
   org orgs [not null]
-  UsersOnRoles users_on_roles [not null]
+  users users_on_roles [not null]
 }
 
 Table users {
@@ -49,7 +48,7 @@ Table users {
   isVerified Boolean [not null, default: false]
   roles users_on_roles [not null]
   channels users_on_channels [not null]
-  Message messages [not null]
+  messages messages [not null]
 }
 
 Table channels {
@@ -92,8 +91,6 @@ Table users_on_roles {
   userId String [not null]
   role roles [not null]
   roleId String [not null]
-  Org orgs
-  orgId String
 
   indexes {
     (roleId, userId) [pk]
@@ -138,8 +135,6 @@ Ref: users_on_channels.channelId > channels.id
 Ref: users_on_roles.userId > users.id
 
 Ref: users_on_roles.roleId > roles.id
-
-Ref: users_on_roles.orgId > orgs.id
 
 Ref: users_on_orgs.userId > users.id
 
