@@ -1,5 +1,6 @@
-import { request } from "@/lib/request";
-import * as z from "zod";
+import { request } from '@/lib/request';
+import * as z from 'zod';
+import { channelSchema } from './channels';
 
 const createCategorySchema = z.object({
   name: z.string(),
@@ -12,14 +13,7 @@ export const categorySchema = z.object({
   id: z.string(),
   isPrivate: z.boolean(),
   name: z.string(),
-  channels: z.array(
-    z.object({
-      id: z.string(),
-      name: z.string(),
-      isPrivate: z.boolean(),
-      type: z.string(),
-    }),
-  ),
+  channels: z.array(channelSchema),
 });
 
 export type Category = z.infer<typeof categorySchema>;
@@ -32,4 +26,8 @@ export const createCategory = async ({
   createCategoryDto: CreateCategory;
 }) => {
   return request.post(`/orgs/${orgID}/categories`, createCategoryDto);
+};
+
+export const deleteCategory = async (categoryID: string) => {
+  return request.delete(`/categories/${categoryID}`);
 };
