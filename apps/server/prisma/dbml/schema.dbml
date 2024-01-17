@@ -49,8 +49,14 @@ Table users {
   roles users_on_roles [not null]
   channels users_on_channels [not null]
   messages messages [not null]
-  friends users [not null]
-  friendsOf users [not null]
+  friends friends [not null]
+}
+
+Table friends {
+  id String [pk]
+  user users [not null]
+  userId String [not null]
+  status RelationShipStatus [not null]
 }
 
 Table channels {
@@ -110,6 +116,12 @@ Table users_on_orgs {
   }
 }
 
+Enum RelationShipStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
 Enum ChannelType {
   TEXT
   VOICE
@@ -121,6 +133,8 @@ Enum ChannelType {
 Ref: categories.orgId > orgs.id [delete: Cascade]
 
 Ref: roles.orgId > orgs.id
+
+Ref: friends.userId > users.id
 
 Ref: channels.orgId > orgs.id [delete: Cascade]
 
