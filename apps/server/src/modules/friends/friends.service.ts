@@ -38,7 +38,18 @@ export const FriendsService = {
       },
     });
 
-    return friends;
+    const formattedFriends = friends.map((friend) => {
+      const user = friend.user.id === userId ? friend.userOf : friend.user;
+      return {
+        id: friend.id,
+        status: friend.status,
+        createdAt: friend.createdAt,
+        updatedAt: friend.updatedAt,
+        user,
+      };
+    });
+
+    return formattedFriends;
   },
   async sendRequest(user: User, userOf: User) {
     return await db.friend.create({
