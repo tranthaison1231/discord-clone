@@ -44,19 +44,29 @@ Table users {
   password String [not null]
   salt String [not null]
   orgs users_on_orgs [not null]
+  username String [unique]
   fullName String
   isVerified Boolean [not null, default: false]
   roles users_on_roles [not null]
   channels users_on_channels [not null]
   messages messages [not null]
   friends friends [not null]
+  friendsOf friends [not null]
 }
 
 Table friends {
   id String [pk]
   user users [not null]
   userId String [not null]
-  status RelationShipStatus [not null]
+  userOfId String [not null]
+  userOf users [not null]
+  status RelationShipStatus [not null, default: 'PENDING']
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+
+  indexes {
+    (userId, userOfId) [unique]
+  }
 }
 
 Table channels {
@@ -135,6 +145,8 @@ Ref: categories.orgId > orgs.id [delete: Cascade]
 Ref: roles.orgId > orgs.id
 
 Ref: friends.userId > users.id
+
+Ref: friends.userOfId > users.id
 
 Ref: channels.orgId > orgs.id [delete: Cascade]
 

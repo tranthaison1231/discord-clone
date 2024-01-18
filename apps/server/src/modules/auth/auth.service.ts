@@ -62,7 +62,7 @@ export const AuthService = {
 
     return { accessToken };
   },
-  signUp: async (email: string, password: string) => {
+  signUp: async ({ email, password, username }: Prisma.UserCreateInput) => {
     try {
       if (!email || !password) {
         throw new BadRequestException("Email and password are required");
@@ -75,6 +75,7 @@ export const AuthService = {
         data: {
           email: email,
           password: hashedPassword,
+          username: username,
           salt: salt,
         },
       });
