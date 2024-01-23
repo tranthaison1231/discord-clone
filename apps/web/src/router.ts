@@ -8,6 +8,7 @@ export type Path =
   | `/channels/:orgID/:channelID`
   | `/channels/:orgID/channel-browser`
   | `/channels/:orgID/member-safety`
+  | `/channels/@me`
   | `/forgot-password`
   | `/login`
   | `/nitro`
@@ -15,6 +16,8 @@ export type Path =
   | `/reset-password`
   | `/safety`
   | `/servers`
+  | `/shop`
+  | `/store`
   | `/verify-email-success`
 
 export type Params = {

@@ -1,10 +1,10 @@
 import { getOrgs } from "@/apis/orgs";
-import OrgSidebar from "@/components/OrgSidebar";
 import { getToken } from "@/lib/storage";
 import { redirect } from "@/router";
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Outlet } from "react-router-dom";
+import OrgSidebar from "./_components/OrgSidebar";
 
 export function Loader() {
   const isAuth = getToken();

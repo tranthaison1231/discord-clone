@@ -2,15 +2,18 @@ import { getChannels } from "@/apis/channels";
 import { Link, useParams } from "@/router";
 import { Grip, Headphones, Mic, Users } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import SettingModal from "./_components/SettingModal";
 import EventsModal from "./_components/EventsModal";
 import { getOrg } from "@/apis/orgs";
 import OrgMenuDropDown from "./_components/OrgMenuDropDown";
 import CategorySection from "./_components/CategorySection";
+import { cn } from "@/lib/utils";
 
 export default function Component() {
   const { channelID, orgID } = useParams("/channels/:orgID/:channelID");
+
+  const location = useLocation();
 
   const { data: channels } = useQuery({
     queryKey: ["channels", orgID],
@@ -27,7 +30,7 @@ export default function Component() {
       <div className="relative bg-primary-foreground/10 text-primary-foreground 0 w-[16rem] flex flex-col">
         <OrgMenuDropDown org={org} />
         <div className="h-3/4 overflow-scroll">
-          <div className="text-xl text-primary-foreground/60 pl-2 pt-2">
+          <div className="text-xl text-primary-foreground/60 p-2 pt-2">
             <EventsModal />
             <Link
               to="/channels/:orgID/channel-browser"
@@ -43,7 +46,13 @@ export default function Component() {
               state={{
                 channel: channels?.find((channel) => channel.id === channelID),
               }}
-              className="px-3 py-2 flex gap-2 w-full hover:bg-primary-foreground/20"
+              className={cn(
+                "px-3 py-2 flex gap-2 w-full hover:bg-primary-foreground/20",
+                {
+                  "bg-primary-foreground/20":
+                    location.pathname.split("/").pop() === "member-safety",
+                },
+              )}
             >
               <Users />
               <p> Members </p>
