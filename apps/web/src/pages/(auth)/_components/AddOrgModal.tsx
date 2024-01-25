@@ -10,8 +10,8 @@ enum Step {
   CUSTOMIZE_YOUR_SERVER = "CUSTOMIZE_YOUR_SERVER",
 }
 
-const activeClass =
-  "[data-state=inactive]:-translate-x-1/2 [data-state=active]:translate-x-0";
+const tabClass =
+  "p-4 mt-0 bg-primary-foreground/10 data-[state=inactive]:w-0 data-[state=inactive]:p-0  data-[state=inactive]:translate-x-[50%] data-[state=active]:translate-x-0 transition-transform ease-out";
 
 export default function AddOrgModal() {
   const [step, setStep] = useState(Step.CREATE_YOUR_SERVER);
@@ -29,31 +29,43 @@ export default function AddOrgModal() {
           <Plus />
         </div>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] bg-primary-foreground/10">
-        <Tabs className="w-full" value={step}>
-          <TabsContent value={Step.CREATE_YOUR_SERVER} className={activeClass}>
+      <DialogContent
+        className="sm:max-w-[425px] bg-primary-foreground/10 p-0"
+        haveClose={false}
+      >
+        <Tabs
+          className="w-full overflow-hidden bg-primary-foreground/10 rounded-md"
+          value={step}
+        >
+          <TabsContent
+            value={Step.CREATE_YOUR_SERVER}
+            className={tabClass}
+            hidden={false}
+          >
+            <h1 className="text-xl font-bold text-center">
+              Create Your Server
+            </h1>
+            <p className="mt-2 text-gray-400">
+              Your sever is where you and your friends hang out
+            </p>
             <div>
-              <h1 className="text-xl font-bold text-center">
-                Create Your Server
-              </h1>
-              <p className="mt-2 text-gray-400">
-                Your sever is where you and your friends hang out
-              </p>
-              <div>
-                <div
-                  onClick={() => setStep(Step.TELL_US_MORE)}
-                  className="flex gap-2 mt-4 justify-between border p-4 items-center border-white rounded-sm hover:bg-primary-foreground/20 cursor-pointer"
-                >
-                  <div className="flex gap-2 items-center">
-                    <img src={createMyOwn} />
-                    <span>Create My Own </span>
-                  </div>
-                  <ChevronRight />
+              <div
+                onClick={() => setStep(Step.TELL_US_MORE)}
+                className="flex gap-2 mt-4 justify-between border p-4 items-center border-white rounded-sm hover:bg-primary-foreground/20 cursor-pointer"
+              >
+                <div className="flex gap-2 items-center">
+                  <img src={createMyOwn} />
+                  <span>Create My Own </span>
                 </div>
+                <ChevronRight />
               </div>
             </div>
           </TabsContent>
-          <TabsContent value={Step.TELL_US_MORE} className={activeClass}>
+          <TabsContent
+            value={Step.TELL_US_MORE}
+            className={tabClass}
+            hidden={false}
+          >
             <h1 className="text-xl font-bold text-center">
               Tell Us More About Your Server
             </h1>
@@ -61,7 +73,10 @@ export default function AddOrgModal() {
               In order to help you with your setup, is your new server for just
               a few friends or a larger community?
             </p>
-            <div onClick={() => setStep(Step.CUSTOMIZE_YOUR_SERVER)}>
+            <div
+              onClick={() => setStep(Step.CUSTOMIZE_YOUR_SERVER)}
+              hidden={false}
+            >
               <div className="flex gap-2 mt-4 justify-between border p-4 items-center border-white rounded-sm hover:bg-primary-foreground/20 cursor-pointer">
                 <div className="flex gap-2 items-center">
                   <img src={createMyOwn} />
@@ -77,10 +92,7 @@ export default function AddOrgModal() {
               Back
             </button>
           </TabsContent>
-          <TabsContent
-            value={Step.CUSTOMIZE_YOUR_SERVER}
-            className={activeClass}
-          >
+          <TabsContent value={Step.CUSTOMIZE_YOUR_SERVER} className={tabClass}>
             <h1 className="text-xl font-bold text-center">
               Customize Your Server
             </h1>
