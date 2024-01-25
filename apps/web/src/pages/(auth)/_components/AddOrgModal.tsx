@@ -11,7 +11,7 @@ enum Step {
 }
 
 const tabClass =
-  "p-4 mt-0 bg-primary-foreground/10 data-[state=inactive]:w-0 data-[state=inactive]:p-0  data-[state=inactive]:translate-x-[50%] data-[state=active]:translate-x-0 transition-transform ease-out";
+  "p-4 mt-0 bg-primary-foreground/10 data-[state=inactive]:p-0  data-[state=inactive]:translate-x-[50%] data-[state=active]:translate-x-0 transition-transform ease-linear";
 
 export default function AddOrgModal() {
   const [step, setStep] = useState(Step.CREATE_YOUR_SERVER);
