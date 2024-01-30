@@ -39,3 +39,12 @@ export const getOrg = async (orgID: string) => {
     })
     .parse(res.data.data);
 };
+
+interface AddOrgInput {
+  name: string;
+  icon?: string;
+}
+
+export const addOrg = async (addOrgInput: AddOrgInput) => {
+  return request.post(`/orgs`, addOrgInput);
+};

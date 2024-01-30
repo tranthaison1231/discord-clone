@@ -1,8 +1,15 @@
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { ChevronRight, Plus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import createMyOwn from "@/assets/svgs/create-my-own.svg";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
+import { UploadButton } from "@/components/ui/upload-button";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { uploadFile } from "@/apis/upload";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getMe } from "@/apis/users";
+import { addOrg } from "@/apis/orgs";
 
 enum Step {
   CREATE_YOUR_SERVER = "CREATE_YOUR_SERVER",
@@ -14,12 +21,48 @@ const tabClass =
   "p-4 mt-0 bg-primary-foreground/10 data-[state=inactive]:p-0  data-[state=inactive]:translate-x-[50%] data-[state=active]:translate-x-0 transition-transform ease-linear";
 
 export default function AddOrgModal() {
+  const [serverName, setServerName] = useState("");
   const [step, setStep] = useState(Step.CREATE_YOUR_SERVER);
   const [open, setOpen] = useState(false);
+  const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
+  const queryClient = useQueryClient();
 
   const onOpen = () => {
     setStep(Step.CREATE_YOUR_SERVER);
     setOpen(true);
+  };
+
+  const onUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const formData = new FormData();
+    formData.append("file", file);
+    const { data } = await uploadFile(formData);
+    setImageUrl(data.url);
+  };
+
+  const { data: me } = useQuery({
+    queryKey: ["me"],
+    queryFn: () => getMe(),
+  });
+
+  useEffect(() => {
+    if (me?.username) setServerName(`${me.username}'s server`);
+  }, [me?.username]);
+
+  const createOrg = async () => {
+    try {
+      await addOrg({
+        name: serverName,
+        icon: imageUrl,
+      });
+      setOpen(false);
+      queryClient.invalidateQueries({
+        queryKey: ["orgs"],
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -96,16 +139,30 @@ export default function AddOrgModal() {
             <h1 className="text-xl font-bold text-center">
               Customize Your Server
             </h1>
-            <p className="mt-2 text-gray-400">
-              In order to help you with your setup, is your new server for just
-              a few friends or a larger community?
+            <p className="mt-2 text-gray-400 text-center">
+              Give your new server a personality with a name and an icon. You
+              can always change it later.
             </p>
-            <button
-              className="mt-4"
-              onClick={() => setStep(Step.CREATE_YOUR_SERVER)}
-            >
-              Back
-            </button>
+            <div className="flex justify-center my-4">
+              <UploadButton onChange={onUpload} imageUrl={imageUrl} />
+            </div>
+            <p className="mb-2"> SERVER NAME </p>
+            <Input
+              value={serverName}
+              onChange={(e) => setServerName(e.target.value)}
+            />
+            <p className="mt-4">By creating a server, you agree to Discrod</p>
+            <div className="flex justify-between mt-4">
+              <button
+                className="mt-4"
+                onClick={() => setStep(Step.CREATE_YOUR_SERVER)}
+              >
+                Back
+              </button>
+              <Button disabled={!serverName} onClick={createOrg}>
+                Create
+              </Button>
+            </div>
           </TabsContent>
         </Tabs>
       </DialogContent>
