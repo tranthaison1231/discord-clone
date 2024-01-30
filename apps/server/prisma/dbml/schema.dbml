@@ -4,7 +4,7 @@
 
 Table orgs {
   id String [pk]
-  icon String [not null]
+  icon String
   name String [not null]
   userId String [not null]
   users users_on_orgs [not null]

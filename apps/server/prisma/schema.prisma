@@ -14,7 +14,7 @@ generator client {
 
 model Org {
   id         String        @id @default(cuid())
-  icon       String
+  icon       String?
   name       String
   userId     String
   users      UsersOnOrgs[]
