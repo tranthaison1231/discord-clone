@@ -5,7 +5,7 @@ import { categorySchema } from "./categories";
 const orgSchema = z.object({
   id: z.string(),
   name: z.string(),
-  icon: z.string(),
+  icon: z.string().nullable(),
 });
 
 export type Org = z.infer<typeof orgSchema>;

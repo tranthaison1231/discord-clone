@@ -3,6 +3,13 @@ import { cn } from "@/lib/utils";
 import { useParams, useNavigate } from "@/router";
 import { useLocation } from "react-router-dom";
 import AddOrgModal from "./AddOrgModal";
+import {
+  TooltipContent,
+  TooltipProvider,
+  Tooltip,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface OrgSidebarProps {
   orgs: Org[];
@@ -41,23 +48,32 @@ export default function OrgSidebar({ orgs = [] }: OrgSidebarProps) {
       </div>
       <hr />
       {orgs?.map((org) => (
-        <div key={org.id}>
-          <div
-            className={cn({
-              "fixed left-0 bg-white h-14 rounded-r w-1": org.id === orgID,
-            })}
-          />
-          <img
-            onClick={() =>
-              navigate("/channels/:orgID/:channelID", {
-                params: { orgID: org.id, channelID: "1" },
-              })
-            }
-            src={org.icon}
-            alt={org.name}
-            className="w-14 h-14 cursor-pointer"
-          />
-        </div>
+        <TooltipProvider key={org.id}>
+          <Tooltip>
+            <TooltipTrigger className="block">
+              <div
+                className={cn({
+                  "fixed left-0 bg-white h-14 rounded-r w-1": org.id === orgID,
+                })}
+              />
+
+              <Avatar
+                className="w-14 h-14"
+                onClick={() =>
+                  navigate("/channels/:orgID/:channelID", {
+                    params: { orgID: org.id, channelID: "1" },
+                  })
+                }
+              >
+                <AvatarImage src={org.icon} alt={org.name} />
+                <AvatarFallback>{org.name.slice(0, 2)}</AvatarFallback>
+              </Avatar>
+            </TooltipTrigger>
+            <TooltipContent side="right" align="start">
+              {org.name}
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       ))}
       <AddOrgModal />
     </div>
