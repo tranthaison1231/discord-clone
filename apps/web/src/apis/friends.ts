@@ -1,11 +1,17 @@
 import { request } from "@/lib/request";
 import * as z from "zod";
 
+export enum FriendStatus {
+  PENDING = "PENDING",
+  ACCEPTED = "ACCEPTED",
+  REJECTED = "REJECTED",
+}
+
 export const friendSchema = z.object({
   id: z.string(),
   createdAt: z.string(),
   updatedAt: z.string(),
-  status: z.string(),
+  status: z.nativeEnum(FriendStatus),
   user: z.object({
     id: z.string(),
     username: z.string(),
