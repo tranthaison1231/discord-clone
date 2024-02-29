@@ -16,6 +16,13 @@ export const friendSchema = z.object({
     id: z.string(),
     username: z.string(),
     email: z.string(),
+    fullName: z.string().nullable(),
+  }),
+  userOf: z.object({
+    id: z.string(),
+    username: z.string(),
+    email: z.string(),
+    fullName: z.string().nullable(),
   }),
 });
 
