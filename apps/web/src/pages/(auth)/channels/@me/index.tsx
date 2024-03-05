@@ -1,20 +1,22 @@
-import { FriendStatus, getFriends } from "@/apis/friends";
+import { Friend, FriendStatus } from "@/apis/friends";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useQuery } from "@tanstack/react-query";
 import { User } from "lucide-react";
 import Pending from "./_components/Pending";
+import { useOutletContext } from "react-router-dom";
 
 export default function Me() {
-  const friendsQuery = useQuery({
-    queryKey: ["friends"],
-    queryFn: () => getFriends(),
-  });
+  const { totalIncomingRequests, friends } =
+    useOutletContext<{
+      totalIncomingRequests: number;
+      friends: Friend[];
+    }>() ?? {};
 
-  const pendingFriends = friendsQuery.data?.filter(
+  const pendingFriends = friends?.filter(
     (friend) => friend.status === FriendStatus.PENDING,
   );
-  const friends = friendsQuery.data?.filter(
+
+  const acceptedFiends = friends?.filter(
     (friend) => friend.status === FriendStatus.ACCEPTED,
   );
 
@@ -34,7 +36,12 @@ export default function Me() {
               All
             </TabsTrigger>
             <TabsTrigger value="pending" className="w-fit">
-              Pending
+              Pending{" "}
+              {!!totalIncomingRequests && (
+                <div className="ml-3 w-6 h-6 rounded-full flex items-center justify-center bg-red-500 text-white">
+                  {totalIncomingRequests}
+                </div>
+              )}
             </TabsTrigger>
             <TabsTrigger value="blocked" className="w-fit">
               Blocked
@@ -43,7 +50,7 @@ export default function Me() {
           <Button variant="success">Add Friend</Button>
         </div>
         <TabsContent value="all">
-          {friends?.map((friend) => (
+          {acceptedFiends?.map((friend) => (
             <div key={friend.id}>
               <p>{friend.user.username}</p>
             </div>

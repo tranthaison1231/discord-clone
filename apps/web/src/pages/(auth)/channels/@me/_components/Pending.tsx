@@ -1,31 +1,43 @@
 import { type Friend } from '@/apis/friends';
 import { Input } from '@/components/ui/input';
+import useGetMeQuery from '@/hooks/useGetMeQuery';
 
 interface PendingProps {
   friends: Friend[];
 }
 
 export default function Pending({ friends }: PendingProps) {
+  const { data: me } = useGetMeQuery();
   return (
     <div className='ml-8'>
       <Input placeholder='Search' />
       <p className='py-4 border-b-2 border-gray-500'>
-        {' '}
         Pending - {friends.length}
       </p>
-
-      {friends?.map((friend) => (
-        <div key={friend.id} className='flex gap-4'>
-          <img
-            src='https://i.pinimg.com/originals/ea/85/b7/ea85b7af823d7c98be67119ddf05d656.jpg'
-            alt=''
-            className='object-cover rounded-full w-14 h-14'
-          />
-          <div className='flex space-y-2'>
-            <p>{friend.user.username}</p>
+      {friends?.map((friend) => {
+        const isMeSendRequest = me.id === friend.user.id;
+        return (
+          <div key={friend.id} className='px-2 py-4 group hover:bg-gray-500'>
+            <div>
+              <p>
+                {isMeSendRequest
+                  ? friend.userOf.fullName
+                  : friend.user.fullName}
+                <span className='hidden ml-4 group-hover:inline'>
+                  {isMeSendRequest
+                    ? friend.userOf.username
+                    : friend.user.username}
+                </span>
+              </p>
+              <p>
+                {isMeSendRequest
+                  ? 'Outgoing Friend Request'
+                  : 'Incoming Friend Request'}
+              </p>
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
