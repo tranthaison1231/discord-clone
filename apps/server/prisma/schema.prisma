@@ -67,6 +67,7 @@ model User {
   fullName   String?
   isVerified Boolean           @default(false)
   roles      UsersOnRoles[]
+  avatarUrl String?
   channels   UsersOnChannels[]
   messages   Message[]
   friends    Friend[]          @relation(name: "user")

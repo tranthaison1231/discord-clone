@@ -48,6 +48,7 @@ Table users {
   fullName String
   isVerified Boolean [not null, default: false]
   roles users_on_roles [not null]
+  avatarUrl String
   channels users_on_channels [not null]
   messages messages [not null]
   friends friends [not null]
