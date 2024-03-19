@@ -14,23 +14,23 @@
     "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.521.0",
-    "@aws-sdk/s3-request-presigner": "^3.521.0",
+    "@aws-sdk/client-s3": "^3.536.0",
+    "@aws-sdk/s3-request-presigner": "^3.536.0",
     "@hono/node-server": "^1.8.2",
-    "@hono/zod-validator": "^0.1.11",
-    "@prisma/client": "^5.10.2",
+    "@hono/zod-validator": "^0.2.0",
+    "@prisma/client": "^5.11.0",
     "@react-email/components": "0.0.15",
     "@react-email/render": "0.0.12",
     "@types/multer": "^1.4.11",
-    "@types/react": "^18.2.60",
-    "@types/react-dom": "^18.2.19",
+    "@types/react": "^18.2.67",
+    "@types/react-dom": "^18.2.22",
     "bcrypt": "^5.1.1",
     "concurrently": "^8.2.2",
     "dotenv": "^16.4.5",
-    "hono": "^4.0.7",
+    "hono": "^4.1.2",
     "jsonwebtoken": "^9.0.2",
-    "nodemailer": "^6.9.10",
-    "prisma": "^5.10.2",
+    "nodemailer": "^6.9.12",
+    "prisma": "^5.11.0",
     "react": "^18.2.0",
     "react-email": "^2.1.0",
     "zod": "^3.22.4"
@@ -43,6 +43,6 @@
     "ts-node": "^10.9.2",
     "tsc-alias": "^1.8.8",
     "tsx": "^4.7.1",
-    "typescript": "^5.3.3"
+    "typescript": "^5.4.2"
   }
 }
