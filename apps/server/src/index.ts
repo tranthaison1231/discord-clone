@@ -44,3 +44,5 @@ app.onError(errorFilter);
 serve(app, () => {
   console.log("Server is running on http://localhost:3000");
 });
+
+export default app;
