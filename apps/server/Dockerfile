@@ -1,18 +1,19 @@
-# Use an official Node.js, and it should be version 16 and above
-FROM node:21-alpine
-# Set the working directory in the container
+FROM node:20-alpine AS base 
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+COPY . /app
 WORKDIR /app
-# Copy package.json and pnpm-lock.yaml
-COPY pnpm-lock.yaml package.json ./
-# Install app dependencies using PNPM
-RUN npm install -g pnpm
-# Install dependencies
-RUN pnpm i 
-# Copy the application code 
-COPY . .
-# Build the TypeScript code
+
+FROM base AS prod-deps
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
+
+FROM base AS build
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 RUN pnpm run build
-# Expose the app
-EXPOSE 3000
-# Start the application
-CMD ["pnpm", "start"]
+
+FROM base
+COPY --from=prod-deps /app/node_modules /app/node_modules
+COPY --from=build /app/public /app/public
+EXPOSE 8000
+CMD [ "node", "public/index.js" ]
