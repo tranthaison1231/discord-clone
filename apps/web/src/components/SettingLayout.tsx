@@ -1,9 +1,11 @@
 import { cn } from "@/lib/utils";
 import { User } from "lucide-react";
 import { Link, Outlet, useLocation } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 
 export default function SettingLayout() {
   const location = useLocation();
+  const context = useOutletContext();
   return (
     <div className="w-full flex">
       <div className="relative bg-primary-foreground/10 text-primary-foreground 0 w-[16rem] flex flex-col">
@@ -16,7 +18,7 @@ export default function SettingLayout() {
                 {
                   "bg-primary-foreground/20":
                     location.pathname === "/channels/@me",
-                },
+                }
               )}
             >
               <User />
@@ -28,7 +30,7 @@ export default function SettingLayout() {
                 "px-3 py-2 flex gap-2 w-full hover:bg-primary-foreground/20",
                 {
                   "bg-primary-foreground/20": location.pathname === "/store",
-                },
+                }
               )}
             >
               <User />
@@ -40,7 +42,7 @@ export default function SettingLayout() {
                 "px-3 py-2 flex gap-2 w-full hover:bg-primary-foreground/20",
                 {
                   "bg-primary-foreground/20": location.pathname === "/shop",
-                },
+                }
               )}
             >
               <User />
@@ -64,7 +66,7 @@ export default function SettingLayout() {
         </div>
       </div>
       <div className="w-[calc(100%-16rem)]">
-        <Outlet />
+        <Outlet context={context} />
       </div>
     </div>
   );

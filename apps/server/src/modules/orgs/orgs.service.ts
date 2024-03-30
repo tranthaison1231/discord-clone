@@ -63,6 +63,14 @@ export const OrgsService = {
     });
     return roles;
   },
+  addMember: async (orgId:string , userId : string) => {
+     await db.usersOnOrgs.create({
+      data: {
+        orgId: orgId,
+        userId:userId
+      },
+    });
+  },
   createRole: async (orgId: string, createRoleDto: Prisma.RoleCreateInput) => {
     const role = await db.role.create({
       data: {

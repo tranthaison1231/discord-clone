@@ -101,6 +101,17 @@ router
       where: {
         orgId: orgId,
       },
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+            fullName: true,
+            avatarUrl:true,
+            email:true,
+          },
+        },
+      }
     });
 
     return c.json({
@@ -119,6 +130,16 @@ router
 
     return c.json({
       data: members,
+      status: 200,
+    });
+  })
+  .post("/:orgId/members/:memberId", async (c) => {
+    const orgId = c.req.param("orgId");
+    const memberId = c.req.param("memberId")
+    await OrgsService.addMember(orgId, memberId);
+   
+    return c.json({
+      message: "add member succesfully",
       status: 200,
     });
   })

@@ -13,11 +13,11 @@ export default function Me() {
     }>() ?? {};
 
   const pendingFriends = friends?.filter(
-    (friend) => friend.status === FriendStatus.PENDING,
+    (friend) => friend.status === FriendStatus.PENDING
   );
 
   const acceptedFiends = friends?.filter(
-    (friend) => friend.status === FriendStatus.ACCEPTED,
+    (friend) => friend.status === FriendStatus.ACCEPTED
   );
 
   return (

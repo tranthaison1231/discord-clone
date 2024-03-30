@@ -35,7 +35,7 @@ export default function App() {
 
   const totalIncommingFriendsRequest = useMemo(() => {
     const pendingFriends = friendsQuery.data?.filter(
-      (friend) => friend.status === FriendStatus.PENDING,
+      (friend) => friend.status === FriendStatus.PENDING
     );
 
     return pendingFriends?.filter((friend) => friend.user.id !== me.id).length;

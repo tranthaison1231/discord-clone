@@ -56,4 +56,11 @@ export const FriendsService = {
       },
     });
   },
+  async deleteFriendRequest (id : string ) {
+    return await db.friend.delete({
+      where: {
+        id: id,
+      },
+    })
+  }
 };

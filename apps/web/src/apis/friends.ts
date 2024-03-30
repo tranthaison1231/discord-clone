@@ -32,3 +32,11 @@ export const getFriends = async () => {
   const res = await request.get(`/friends`);
   return friendSchema.array().parse(res.data.data);
 };
+
+export const deleteFriend = async (id: string) => {
+  const res = await request.delete(`/friends/${id}`);
+  return res;
+}
+export const addFriend = async(username:string ) => {
+  return await request.post(`/friends` , {username:username}) ;
+}
