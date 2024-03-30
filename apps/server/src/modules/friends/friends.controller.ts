@@ -16,6 +16,14 @@ router
       status: 200,
     });
   })
+  .delete( "/:id" , async (c) => {
+    const friendId = c.req.param("id");
+    const friend =   await FriendsService.deleteFriendRequest(friendId);
+    return c.json({
+      data: friend,
+      status: 200,
+    });
+  })
   .post("/", zValidator("json", sendFriendRequestDto), async (c) => {
     const { username } = await c.req.json();
     const user = c.get("user");
