@@ -26,8 +26,8 @@ app.use(
     credentials: true,
   }),
 );
-app.route("/", authRouter);
 
+app.route("/", authRouter);
 app.route("/blogs", blogsRouter);
 
 app.all("*", auth).route("/orgs", orgsRouter);
