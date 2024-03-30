@@ -1,6 +1,11 @@
 import { getOrgMembers } from "@/apis/orgs";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
+import {
   Table,
   TableBody,
   TableCell,
@@ -12,6 +17,7 @@ import { Link, useParams } from "@/router";
 import { HelpCircle, Users } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "react-router-dom";
+import { addFriend } from "@/apis/friends";
 
 export default function Component() {
   const { orgID } = useParams("/channels/:orgID/member-safety");
@@ -21,6 +27,9 @@ export default function Component() {
     queryKey: ["members"],
     queryFn: () => getOrgMembers(orgID),
   });
+  const handleAddFriend = async (username: string) => {
+    await addFriend(username);
+  };
 
   return (
     <div>
@@ -63,31 +72,46 @@ export default function Component() {
             </TableHeader>
             <TableBody>
               {members?.map((member) => (
-                <TableRow key={member.id}>
-                  <TableCell className="gap-2 flex items-center">
-                    <Checkbox />
-                    <div className="flex gap-2">
-                      <img
-                        src={member.avatar}
-                        alt={member.displayName}
-                        className="w-10 h-10 rounded-full object-cover"
-                      />
-                      <div>
-                        <p className="text-green-500">{member.displayName}</p>
-                        <p>{member.username}</p>
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>{member.memberSince}</TableCell>
-                  <TableCell>{member.joinedDiscord}</TableCell>
-                  <TableCell>{member.joinMethod}</TableCell>
-                  <TableCell>{member.roles.map((role) => role)}</TableCell>
-                  <TableCell />
-                  <TableCell>
-                    <button>View</button>
-                    <button>Edit</button>
-                  </TableCell>
-                </TableRow>
+                <ContextMenu>
+                  <ContextMenuTrigger asChild>
+                    <TableRow key={member?.user?.id}>
+                      <TableCell className="gap-2  flex items-center">
+                        <Checkbox />
+                        <div className="flex gap-2">
+                          <img
+                            src={member?.user.avatarUrl || ""}
+                            alt={member?.user?.fullName}
+                            className="w-10 h-10 rounded-full object-cover"
+                          />
+                          <div>
+                            <p className="text-green-500">
+                              {member?.user?.fullName}
+                            </p>
+                            <p>{member?.user?.username}</p>
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell>member</TableCell>
+                      <TableCell>member</TableCell>
+                      <TableCell>member</TableCell>
+                      <TableCell>member</TableCell>
+                      <TableCell>
+                        <button>View</button>
+                        <button>Edit</button>
+                      </TableCell>
+                    </TableRow>
+                  </ContextMenuTrigger>
+                  <ContextMenuContent className="w-64 p-2">
+                    <h3
+                      className="cursor-pointer"
+                      onClick={() => {
+                        handleAddFriend(member?.user?.username);
+                      }}
+                    >
+                      Add Friends
+                    </h3>
+                  </ContextMenuContent>
+                </ContextMenu>
               ))}
             </TableBody>
           </Table>
