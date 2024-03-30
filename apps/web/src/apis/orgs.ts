@@ -26,6 +26,9 @@ const memberSchema = z.object({
     username: z.string()
   }),
 })
+
+export type Member = z.infer<typeof memberSchema>;
+
 export const getOrgMembers = async (orgID: string) => {
   const res = await request.get(`/orgs/${orgID}/members`);
   return memberSchema.array().parse(res.data.data);
@@ -48,3 +51,16 @@ interface AddOrgInput {
 export const addOrg = async (addOrgInput: AddOrgInput) => {
   return request.post(`/orgs`, addOrgInput);
 };
+
+const roleSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  color: z.string(),
+  orgId: z.string(),
+});
+
+
+export const getRoles = async (orgID: string) => {
+  const res = await request.get(`/orgs/${orgID}/roles`);
+  return roleSchema.array().parse(res.data.data);
+}

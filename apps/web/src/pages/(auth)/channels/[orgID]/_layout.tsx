@@ -1,27 +1,27 @@
-import { getChannels } from "@/apis/channels";
-import { Link, useParams } from "@/router";
-import { Grip, Headphones, Mic, Users } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import { Outlet, useLocation } from "react-router-dom";
-import SettingModal from "./_components/SettingModal";
-import EventsModal from "./_components/EventsModal";
-import { getOrg } from "@/apis/orgs";
-import OrgMenuDropDown from "./_components/OrgMenuDropDown";
-import CategorySection from "./_components/CategorySection";
-import { cn } from "@/lib/utils";
+import { getChannels } from '@/apis/channels';
+import { Link, useParams } from '@/router';
+import { Grip, Headphones, Mic, Users } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { Outlet, useLocation } from 'react-router-dom';
+import SettingModal from './_components/SettingModal';
+import EventsModal from './_components/EventsModal';
+import { getOrg } from '@/apis/orgs';
+import OrgMenuDropDown from './_components/OrgMenuDropDown';
+import CategorySection from './_components/CategorySection';
+import { cn } from '@/lib/utils';
 
 export default function Component() {
-  const { channelID, orgID } = useParams("/channels/:orgID/:channelID");
+  const { channelID, orgID } = useParams('/channels/:orgID/:channelID');
 
   const location = useLocation();
 
   const { data: channels } = useQuery({
-    queryKey: ["channels", orgID],
+    queryKey: ['channels', orgID],
     queryFn: () => getChannels(orgID),
   });
 
   const { data: org } = useQuery({
-    queryKey: ["orgs", orgID],
+    queryKey: ['orgs', orgID],
     queryFn: () => getOrg(orgID),
   });
 
@@ -47,11 +47,11 @@ export default function Component() {
                 channel: channels?.find((channel) => channel.id === channelID),
               }}
               className={cn(
-                "px-3 py-2 flex gap-2 w-full hover:bg-primary-foreground/20",
+                'px-3 py-2 flex gap-2 w-full hover:bg-primary-foreground/20',
                 {
-                  "bg-primary-foreground/20":
-                    location.pathname.split("/").pop() === "member-safety",
-                },
+                  'bg-primary-foreground/20':
+                    location.pathname.split('/').pop() === 'member-safety',
+                }
               )}
             >
               <Users />
